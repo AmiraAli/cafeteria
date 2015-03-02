@@ -10,8 +10,6 @@ class validator{
 		}
 
 	}
-        
-       
 
 
 	function empty_fields($data){

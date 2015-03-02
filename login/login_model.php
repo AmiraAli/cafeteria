@@ -61,38 +61,36 @@ class login_ORM {
      * this function to select all query
      * @return type
      */
-    function select_all() {
-        $query = "select * from " . $this->table;
-        $state = $this->dbconn->query($query);
-        if (!$state) {
-            return $this->dbconn->error;
-        }
-        return $state->fetch_object();
-    }
-      public function query($sql) {
-        if ($this->_query = $this->dbconn->prepare($sql));
-            if ($this->_query->execute()) {
-                echo "sucess";
-                $this->_results = $this->_query->fetch_array();
-                $this->_count = $this->_query->rowCount();
-            } else {
-                $this->_errors = TRUE;
-            }
+   
 
-            return $this;
+    function select($values){
+		$query="select * from ".$this->table." where ";
+		foreach($values as $key =>$value)
+		{
+			$query.=$key." = '".$value."' and ";
+		}
+		$query=explode(" ",$query);
+		unset($query[count($query)-2]);
+		$query=implode(" ",$query);
+
+		$result =  $this->dbconn->query(trim($query));
+
+		return $result;
+
+	}
         
-    }
+        function update($values)
+        {
+            $set='';
+            foreach($values as $key =>$value)
+		{
+			$query.=$key." = '".$value."' and ";
+		}
+            
+//          $query="update".$this->table."set" .;
 
-    function select($values) {
-        $query = "select * from " . $this->table . " where ";
-        foreach ($values as $key => $value) {
-            $query.=$key . " = '" . $value . "' and ";
-        } $query = explode(" ", $query);
-        unset($query[count($query) - 2]);
-        $query = implode(" ", $query);
-        $result = $this->dbconn->query(trim($query));
-        return $result;
-    }
+            
+        }
     
      public function results() {
        return $this->_results;

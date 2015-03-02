@@ -32,20 +32,33 @@ if (!empty($_POST['submit'])) {
         //check information from database
             $email=$_POST['email'];
             $password=$_POST['password'];
-             $user_values = array("email" =>$email,"password" =>$password);
+            $user_values = array("email" =>$email,"password" =>$password);
+            $results=$obj->select($user_values);
+            $row=$results->fetch_assoc();
+           
           
-
-            $results=$obj->select_all($user_values);
-            var_dump($results);
-
-
-        if ($obj->count()) {
-            echo "you must register first";
-        } else {
-            foreach ($obj as $obj) {
-                echo $obj->$username, '<br>';
+            if($row)
+            {
+                
+                 $_SESSION['login_user'] = $email;
+                //Redirecting To Other Page
+                header("location: ../user/user_home.php");
+                echo $row['name'];
+               
             }
-        }
+
+
+//        if (!$row) {
+//            echo "you must register first";
+//        } else {
+//             foreach ($row as $key => $value) {
+//                  echo $key . " " . $value . "<br/>";
+//                 
+//             }
+////            foreach ($row->results() as $obj) {
+////                echo $obj->$username, '<br>';
+////            }
+//        }
     }
 }
 ?>
@@ -80,7 +93,7 @@ if (!empty($_POST['submit'])) {
                     <div class="col-sm-offset-2 col-sm-10">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"> forget password
+                                <a href="forget password.php">forget password </a>
                             </label>
                         </div>
                     </div>
