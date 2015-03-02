@@ -10,6 +10,39 @@ class validator{
 		}
 
 	}
+        
+        function check_email($emaildb, $postemail) {
+        if ($emaildb== $postemail) {
+            return true;
+        } else {
+            return "invalid email please check your email" . "<br>";
+        }
+    }
+    
+     
+        function check_question($questiondb, $question) {
+        if ($questiondb== $question) {
+            return true;
+        } else {
+            return "your question is incorrect please check it" . "<br>";
+        }
+    }
+    
+    function check_answer($answerdb, $answer) {
+        if ($answerdb== $answer) {
+            header("location: ../user/user_home.php");
+        } else {
+            return "" . "<br>";
+        }
+    }
+    
+     function valid_password($password, $confirm_password) {
+        if ($password == $confirm_password) {
+            return true;
+        } else {
+            return "not match password type it again" . "<br>";
+        }
+    }
 
 
 	function empty_fields($data){

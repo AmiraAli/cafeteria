@@ -37,15 +37,20 @@ if (!empty($_POST['submit'])) {
             $row=$results->fetch_assoc();
            
           
-            if($row)
+        if($row)
             {
-                
-                 $_SESSION['login_user'] = $email;
+                $name=$row['name'];
+                session_start();
+                $_SESSION['login_user'] = $name;
                 //Redirecting To Other Page
                 header("location: ../user/user_home.php");
-                echo $row['name'];
+                
                
             }
+             else {
+                echo "you must register first";
+
+                  }
 
 
 //        if (!$row) {

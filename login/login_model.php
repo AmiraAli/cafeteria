@@ -79,18 +79,32 @@ class login_ORM {
 
 	}
         
-        function update($values)
+        function update($values,$id)
         {
-            $set='';
-            foreach($values as $key =>$value)
-		{
-			$query.=$key." = '".$value."' and ";
-		}
-            
-//          $query="update".$this->table."set" .;
-
-            
+           if(!empty($values))
+           {
+           $set='';
+           $x=1;
+           foreach ($values as $fieldname => $fieldvalue) {
+                $set .="{$fieldname}=?";
+                if($x< count($values))
+                {
+                    $set .=',';
+                }
+                $x++;
         }
+                $query="update $this->table set {$set} where id ={$id}";
+                $query=explode(" ",$query);
+		unset($query[count($query)-2]);
+		$query=implode(" ",$query);
+                $result =  $this->dbconn->query(trim($query));
+
+		return $result;
+
+        }
+        }
+        
+      
     
      public function results() {
        return $this->_results;

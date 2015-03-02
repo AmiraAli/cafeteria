@@ -28,27 +28,29 @@ if (!empty($_POST['submit'])) {
     }
 
     if ($flag == true) {
-
-        //check information from database
         $email = $_POST['email'];
+        
         $question = $_POST['question'];
-
-        $user_values = array("email" => $email, "question" => $question,"answer");
-        $results = $obj->select($user_values);
-        $row = $results->fetch_assoc();
-        var_dump($row);
-
-
-        if (!$row) {
-            echo "your email is wrong please check your email";
-        } else {
-            foreach ($row as $key => $value) {
-                echo $key . " " . $value . "<br/>";
+        
+        $answer=$_POST['answer'];
+        
+        $user_values = array("email" =>$email,"question" =>$question,"answer"=>$answer);
+        $result=$obj->select($user_values);
+        $get=$result->fetch_assoc();
+        
+        
+       
+        
+         if($get)
+            {  
+                $id=$get["id"];
+                session_start();
+                $_SESSION['forget_pass'] = $id;
+                header("location:reset_password.php");
+                
+               
             }
-//            foreach ($row->results() as $obj) {
-//                echo $obj->$username, '<br>';
-//            }
-        }
+    
     }
 }
 ?>
@@ -75,7 +77,14 @@ if (!empty($_POST['submit'])) {
                 <div class="form-group">
                     <label for="question" class="col-sm-2 control-label">insert your question</label>
                     <div class="col-sm-10">
-                        <input type="question" name="question" class="form-control" id="inputPassword3" placeholder="Password">
+                        <input type="text" name="question" class="form-control"  placeholder="Password">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="answer" class="col-sm-2 control-label" >insert your answer</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="answer" class="form-control">
                     </div>
                 </div>
 

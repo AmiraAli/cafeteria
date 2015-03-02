@@ -55,6 +55,10 @@ require 'user_model.php';
         <div class="header">
             <a href="user_home.php">HOME</a>
             <a href="user_orders.php">My Orders</a>
+            <p><?php   session_start(); 
+                       $admin=$_SESSION['login_user'];
+                       echo $admin;
+            ?></p>
         </div>
 
         <div class="container">
