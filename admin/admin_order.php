@@ -11,8 +11,19 @@ require '../model/model.php';
 //default status=processing
 $order_price = $_POST['order_price'];
 $order_room=$_POST['room'];
+$order_user=$_POST['user'];
 
-$user_id = 1;
+/**
+ * select from table of users the user id by user name
+ */
+
+$obj_order_user = ORM::getInstance();
+$obj_order_user->setTable('users');
+$user=$obj_order_user->select(array('name'=>$order_user));
+
+$user_info = $user->fetch_assoc();
+$user_id=$user_info['id'];
+
 $status = "processing";
 
 /**
