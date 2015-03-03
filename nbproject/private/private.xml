@@ -3,30 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <file>file:/var/www/html/cafeteria/user/user_model.php</file>
-            <file>file:/var/www/html/cafeteria/admin/all_products.php</file>
-            <file>file:/var/www/html/cafeteria/admin/add_user.php</file>
-            <file>file:/var/www/html/cafeteria/admin/add_product.php</file>
-            <file>file:/var/www/html/cafeteria/user/appconf.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
-            <file>file:/var/www/html/cafeteria/admin/checks.php</file>
-            <file>file:/var/www/html/cafeteria/admin/manual_order.php</file>
-            <file>file:/var/www/html/cafeteria/login/login_model.php</file>
             <file>file:/var/www/html/cafeteria/login/login.php</file>
-            <file>file:/var/www/html/cafeteria/admin/admin_model.php</file>
-            <file>file:/var/www/html/cafeteria/admin/all_users.php</file>
-=======
->>>>>>> cf4feec4c25870a1984e62a084bd6a4e0a70b53c
-=======
-
-            <file>file:/var/www/cafeteria/admin/add_user.php</file>
-            <file>file:/var/www/cafeteria/admin/validation.php</file>
-
->>>>>>> 64f5f909a89ecfcb232723d3f3d993abe105a1be
-            <file>file:/var/www/html/cafeteria/user/user_home.php</file>
-
+            <file>file:/var/www/html/cafeteria/login/myorder.php</file>
+            <file>file:/var/www/html/cafeteria/login/checks.php</file>
         </group>
     </open-files>
 </project-private>

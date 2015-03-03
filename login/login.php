@@ -30,27 +30,22 @@ if (!empty($_POST['submit'])) {
     if ($flag == true) {
 
         //check information from database
-            $email=$_POST['email'];
-            $password=$_POST['password'];
-            $user_values = array("email" =>$email,"password" =>$password);
-            $results=$obj->select($user_values);
-            $row=$results->fetch_assoc();
-           
-          
-        if($row)
-            {
-                $name=$row['name'];
-                session_start();
-                $_SESSION['login_user'] = $name;
-                //Redirecting To Other Page
-                header("location: ../user/user_home.php");
-                
-               
-            }
-             else {
-                echo "you must register first";
+        $email = $_POST['email'];
+        $password = md5($_POST['password']);
+        $user_values = array("email" => $email, "password" => $password);
+        $results = $obj->select($user_values);
+        $row = $results->fetch_assoc();
 
-                  }
+
+        if ($row) {
+            $name = $row['name'];
+            session_start();
+            $_SESSION['login_user'] = $name;
+            //Redirecting To Other Page
+            header("location: ../user/user_home.php");
+        } else {
+            echo "you must register first";
+        }
 
 
 //        if (!$row) {
@@ -70,46 +65,71 @@ if (!empty($_POST['submit'])) {
 
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="style.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    </head>
-    <body>
-        <h1>login</h1>
-        <div class="container">
-            <form  method="post" action="login.php" class="form-horizontal">
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email">
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+        <link href="login.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css">
+        <script src="../bootstrap/js/bootstrap.min.js"></script>
 
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <div class="checkbox">
-                            <label>
-                                <a href="forget password.php">forget password </a>
-                            </label>
+    </head>
+    <header>
+         <style>
+            .container{
+
+                background-image: url("../images/products/tea_with_milk.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                height: 600px;
+                
+
+            }
+            .jumbotron
+            {
+                width: 800px;
+                margin-left: 180px;
+                margin-top: 100px;
+                background-color:rgba(192,192,192,0.7);
+            }
+            </style>
+            
+    </header>
+    <body>
+        <div class="container">
+            
+                <div class="form-group-lg"></div>
+                <div class="jumbotron">
+
+                <form  method="post" action="login.php" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email">
+
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <input type="submit" value="submit" name="submit" class="btn btn-default">
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <a href="forget password.php">forget password </a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" value="submit" name="submit" class="btn btn-default">
+                        </div>
+                    </div>
 
-            </form>
+                </form>
+                </div>
+            
         </div>
     </body>
 </html>
