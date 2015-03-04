@@ -14,6 +14,17 @@ require 'user_header.php';
 
     </head>
     <body>
+
+        <div class="header">
+            <a href="user_home.php">HOME</a>
+            <a href="user_orders.php">My Orders</a>
+            <p><?php   session_start(); 
+                       $admin=$_SESSION['login_user'];
+                       echo $admin;
+            ?></p>
+        </div>
+
+
         <div class="container">
             <div class="col-md-3 panel panel-default"  id="create_order">
                 <div class="panel panel-heading">
