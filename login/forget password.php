@@ -39,8 +39,6 @@ if (!empty($_POST['submit'])) {
         $get=$result->fetch_assoc();
         
         
-       
-        
          if($get)
             {  
                 $id=$get["id"];

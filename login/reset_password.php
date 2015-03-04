@@ -30,17 +30,26 @@ if (!empty($_POST['submit'])) {
     {
 //      header("location: ../user/user_home.php");
       $password = $_POST['password'];
-        session_start();
+      session_start();
       $id=$_SESSION['forget_pass'];
       echo $id;
-      $get= array("password" =>$password,"id"=>$id);
-      $results=$obj->update($get,$id);
-      $row=$results->fetch_assoc();
-      var_dump($row);
-  
+      
+      $user_values = array("id" => $id);
+     
+      $results = $obj->select($user_values);
+      $row = $results->fetch_assoc();
+//      var_dump($row);
+      $name = $row['name'];
+      $passwordb=$row['password'];
+      $data=array('password'=>md5($password));
+      echo $name;
+      $filters = array('name'=>$name);
+      $update= $obj->update($filters,$data);
+      var_dump($row2);
+     
     }
     else{
-        echo "please check your password";
+        $error="please check your password";
     }
 
     
@@ -56,7 +65,14 @@ if (!empty($_POST['submit'])) {
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+       
     </head>
+    <header> <script>
+             .error
+             {
+                 color: red;
+             }
+             </script></header>
     <body>
         <h1>reset password</h1>
         <div class="container">
@@ -72,6 +88,7 @@ if (!empty($_POST['submit'])) {
                     <label for="inputPassword3" class="col-sm-2 control-label">confirm password</label>
                     <div class="col-sm-10">
                         <input type="password" name="confirmpassword" class="form-control" id="inputPassword3" placeholder="Password">
+                         <span class="error" ><?php if (isset($error)) echo $error; ?></span> 
                     </div>
                 </div>
 
@@ -81,7 +98,9 @@ if (!empty($_POST['submit'])) {
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <input class="btn btn-success btn-sm" type='submit' name='submit' value='check'>
+                        
                     </div>
+                   
                 </div>
 
             </form>

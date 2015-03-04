@@ -5,7 +5,7 @@ class validator{
 
 	function valid_email($email){
 
-		if(!preg_match('/^[a-z]([a-z0-9]+|[a-z0-9\._-]+[a-z0-9]+)*@[a-z0-9]+\.[a-z]{2,4}+$/',$email) || empty($email)){
+		if(!preg_match('/^[a-zA-Z]([a-zA-Z 0-9]+|[a-zA-Z 0-9]+\.[a-zA-Z 0-9]+)+@[a-zA-Z]+\.((com)|(org)|(net))*$/',$email) || empty($email)){
 		 return "please enter valid mail equal to example@exp.exp"."<br/>";
 		}
 
@@ -43,6 +43,10 @@ class validator{
             return "not match password type it again" . "<br>";
         }
     }
+    
+    // check the password that user enter equal the password saved in databaser
+   
+    
 
 
 	function empty_fields($data){

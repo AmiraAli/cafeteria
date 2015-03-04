@@ -141,13 +141,13 @@ require 'user_model.php';
             </div>
             <div class="create_order" id="create_order">
 
-                <form method="post" action="user_home.php" >
+                <form method="post"  >
                     <div class="create_order_products" id="create_order_products">
 
                     </div>
                     <br/>
                     <br/>
-                    Notes <textarea name='notes'></textarea><br>
+                    Notes <textarea name='notes' id="notes"></textarea><br>
                     Room <select name="room">
                         <?php
                         /**
@@ -177,12 +177,13 @@ require 'user_model.php';
                     <br>
                     <br>
 
-                    <input type='submit' name='confirm' value='Confirm' ><br/>
+                    <input type='submit' name='confirm' value='Confirm' onclick="get_order()"><br/>
                     <label id="total_price">Total Price: 0</label>
                 </form>
             </div>
         </div>
-        
+
+
         <script>
             
             //global array of products id 
@@ -250,44 +251,78 @@ require 'user_model.php';
                 var elem_order_price = document.getElementById("total_price");
                 elem_order_price.innerHTML = "Total Price: "+total_price;
                 
-
+                
 
             }
 
             /**
-             * This function check if there are products in order or not
-             * if there exists it return the total price of the order
-             * @returns {String}
+             * this function that get the order informations to insert in database
+             * @returns {undefined}
              */
 
-            function check_order() {
-
+            function get_order() {
+                
+                
                 //check if the form order has childs of products or not
                 var elem_order = document.getElementById("create_order_products");
+                
                 if (elem_order.childElementCount > 0) {
                     
+                    //get value of all price of order
                     var elem_order_price = document.getElementById("total_price");
-                    var res = elem_order_price.innerHTML.split(" ");
-                   window.location.href="user_home.php?totalprice=res[1]";
-                } else {
-                    return false;
-                }
+                    var orderPrice = elem_order_price.innerHTML.split(" ");
+ 
+                    //get all order notes
+                    var elem_order_notes=document.getElementById("notes").value;
+                    
+                    var product_info="";
+                    
+                    //forloop to get all product and send it in array to request
+                    for(var i=1;i<=elem_order.childElementCount;i++){
+                        
+                        var all_products=elem_order.childNodes;
+                        
+                        //console.log(all_products[1]);
+                        var product=all_products[i];
+                        
+                        //alert(product.nodeType ? "true" : "false" );
 
+                        var product_id=product.getAttribute("id");
+                        
+                        
+                        var product_amount=product.childNodes[1].value;
+                        
+                        var product_price=product.childNodes[2].innerHTML;
+                        
+                        
+                         product_info+=product_id+":"+product_amount+":"+product_price+",";
+                        
+                    }
+
+                    //open xmlhttp request that render to user_order and send total order & products
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open("POST","user_order.php",true);
+                    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                    xmlhttp.send("order_price="+orderPrice[2]+"&notes="+elem_order_notes+"&array="+product_info);
+                    
+                    //on change check even the request send or not
+                  
+                    xmlhttp.onreadystatechange =function () {
+      
+                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                           
+                        console.log(xmlhttp.responseText);
+                        
+                    }
+              };
+              
             }
-                check_order();
+            
 
+          }
 
         </script>
-        <?php
-        /**
-         * insert the order into table of orders and table of order_product
-         */
         
-        if (!empty($_POST['confirm'])) {
-         
-            echo $_GET['totalprice'];
-        }
-        ?>
 
     </body>
 
