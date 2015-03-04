@@ -4,11 +4,29 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
 <<<<<<< HEAD
+            <file>file:/var/www/html/cafeteria/user/user_get_orders.php</file>
+            <file>file:/var/www/html/cafeteria/model/model.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_order.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_home.php</file>
+=======
+<<<<<<< HEAD
+            <file>file:/var/www/html/cafeteria/login/login.php</file>
+            <file>file:/var/www/html/cafeteria/login/myorder.php</file>
+            <file>file:/var/www/html/cafeteria/login/checks.php</file>
+=======
+
+            <file>file:/var/www/html/cafeteria/user/user_model.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_order.php</file>
+
+
             <file>file:/var/www/cafeteria/admin/add_user.php</file>
             <file>file:/var/www/cafeteria/admin/validation.php</file>
-=======
-            <file>file:/var/www/html/cafeteria/user/user_home.php</file>
->>>>>>> cf4feec4c25870a1984e62a084bd6a4e0a70b53c
+
+
+
+>>>>>>> c2815ccc48f5c151a15d6299d061eb4416bde97c
+>>>>>>> 52ba096bd83feed0b8e7c0a201b106cb9057d60d
         </group>
     </open-files>
 </project-private>

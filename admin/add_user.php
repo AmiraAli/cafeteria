@@ -110,7 +110,8 @@
                             }
                             
                             //check on password&email&image 
-                            echo $error = $valid->valid_password($_POST['password'], $_POST['confirmpassword']);
+                            echo $error = $valid->valid_password($_POST['password'],$_POST['confirmpassword']);
+                            
                             echo $error = $valid->valid_email($_POST['email']);
                             echo $error = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
                             if (gettype($error) == "string") {
@@ -132,7 +133,7 @@
                                     }
 
                                 //saving data of user in database 
-                                @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
+                                @$db = mysqli_connect('localhost', 'root', '1234', 'cafeteria');
                                 if (mysqli_connect_errno()) {
                                     echo $error = 'Could not connect to database. Please try again later.';
                                     exit;
@@ -140,7 +141,7 @@
                                 // insert data into database 
                                 $obj = admin_ORM::getInstance();
                                 $obj->setTable('users');
-                                echo $obj->insert(array("name" => $_POST['name'], "email" => $_POST['email'], "password" => $_POST['password'], "room_no" => $_POST['roomno'], "ext" => $_POST['ext'], "is_admin" => 0, "question" => $_POST['securityquestion'], "answer" => $_POST['answer'], "pic" => $_FILES['userfile']['name']));
+                                echo $obj->insert(array("name" => $_POST['name'], "email" => $_POST['email'], "password" =>md5($_POST['password']), "room_no" => $_POST['roomno'], "ext" => $_POST['ext'], "is_admin" => 0, "question" => $_POST['securityquestion'], "answer" => $_POST['answer'], "pic" => $_FILES['userfile']['name']));
 
 
 
