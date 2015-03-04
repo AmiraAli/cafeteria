@@ -144,7 +144,7 @@ require 'user_model.php';
                     <br/>
                     <br/>
                     Notes <textarea name='notes'></textarea><br>
-                    Room <select name="room">
+                    Room <select name="room" class="form-control">
                         <?php
                         /**
                          * get all rooms numbers
