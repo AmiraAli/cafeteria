@@ -143,6 +143,57 @@ class ORM {
     }
 
     /**
+     * Update query that take 2 arrays one for set and the other for where conditions
+     * @param type $set
+     * @param type $where
+     * @return type
+     */
+    function update($set, $where) {
+        $query = "update " . $this->table . " set ";
+        foreach ($set as $key => $value) {
+            $query.=$key . " = '" . $value . "' , ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
+
+        $query.=" where ";
+
+        foreach ($where as $key => $value) {
+            $query.=$key . " = '" . $value . "' and ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
+
+
+        $result = $this->dbconn->query(trim($query));
+
+        if (!$result) {
+            return $this->dbconn->error;
+        }
+
+        return $this->dbconn->affected_rows;
+    }
+
+    /**
+     * select between two dates with where conditions
+     */
+    function select_date($datecol,$date_from, $date_to,$values) {
+        $query = "select * from " . $this->table . " where( ".$datecol." between '".$date_from."' and '".$date_to."') and ";
+        foreach ($values as $key => $value) {
+            $query.=$key . " = '" . $value . "' and ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
+
+        $result = $this->dbconn->query(trim($query));
+
+        return $result;
+    }
+
+    /**
      * deconstractor to close connection
      */
     function __destruct() {
