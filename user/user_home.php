@@ -1,57 +1,20 @@
 <?php
-require 'user_model.php';
+require '../model/model.php';
+require 'user_header.php';
 ?>
 <html>
-    <head>
-        <style>
-            body{
-                width:1000px;
-                height:1000px;
-                border-style: solid;
-                border-width: 1px;
-            }               
-            .header{
-                width:1000px;
-                height:20px;
-                border-style: solid;
-                border-width: 1px;
-            }
-            .lists{
-                width:600px;
-                height:970px;
-                border-style: solid;
-                border-width: 1px;
-                float: right;
-            }
-            .create_order{
-                width:390px;
-                height:970px;
-                border-style: solid;
-                border-width: 1px;
-                float: left;
-            }
-            .last_order{
-                width:600px;
-                height:250px;
-                border-style: solid;
-                border-width: 1px;
-            }
-            .list_products{
-                width:600px;
-                height:780px;
-                border-style: solid;
-                border-width: 1px;
-            }
-            .create_order_products{
-                width:300px;
-                height:500px;
-                border-style: solid;
-                border-width: 1px;
-            }
 
-        </style>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href= "../bootstrap-3.3.2-dist/css/bootstrap.css"> 
+        <link rel="stylesheet" href= "../bootstrap-3.3.2-dist/css/bootstrap-theme.css"> 
+        <script src="../jquery-2.1.3.min.js" type="text/javascript"></script>
+        <script src="../bootstrap-3.3.2-dist/js/bootstrap.js" type="text/javascript"></script>
+
     </head>
     <body>
+
         <div class="header">
             <a href="user_home.php">HOME</a>
             <a href="user_orders.php">My Orders</a>
@@ -61,17 +24,63 @@ require 'user_model.php';
             ?></p>
         </div>
 
-        <div class="container">
 
-            <div class="lists">
-                <div class="last_order">
-                    Last order:
-                    <br/>
+        <div class="container">
+            <div class="col-md-3 panel panel-default"  id="create_order">
+                <div class="panel panel-heading">
+
+                        <h1>   Order  </h1>
+                    </div>
+                <form method="post"  >
+                    <div class="row panel-body" id="create_order_products">
+
+                    </div>
+                    <label  class="col-sm-2 control-label">Notes:</label>
+                    <textarea class="form-control" rows="3" id="notes"></textarea>
+                    <label  class="col-sm-2 control-label">Rooms:</label>
+                    <select name="room" id="room" class="form-control">
+                        <?php
+                        /**
+                         * get all rooms numbers
+                         */
+                        $obj_rooms = ORM::getInstance();
+                        $obj_rooms->setTable('rooms');
+
+                        $all_rooms = $obj_rooms->select_all();
+
+                        if ($all_rooms->num_rows > 0) {
+
+                            while ($room = $all_rooms->fetch_assoc()) {
+                                foreach ($room as $key => $value) {
+                                    ?>
+                                    <option value="<?php echo $room['number']; ?>"><?php echo $room['number']; ?>
+                                        <?php
+                                    }
+                                }
+                            } else {
+                                ?>
+                            <option>NO Rooms
+                                <?php
+                            }
+                            ?>
+                    </select>
+                    <input type='submit' name='confirm' value='Confirm' class="btn btn-primary" onclick="get_order()"><br/>
+                    <label id="total_price" class=" control-label">Total Price: 0</label>
+                </form>
+            </div>
+            <div class="col-md-9 panel panel-default">
+                <div class="row panel-body">
+
+                    <div class="panel panel-heading">
+
+                        <h1> Last order</h1>
+                    </div>
+
                     <?php
                     /**
                      * Select all product of latest order for the user
                      */
-                    $obj_order = user_ORM::getInstance();
+                    $obj_order = ORM::getInstance();
                     $obj_order->setTable('orders');
 
                     // select the latest order  of this user
@@ -83,109 +92,91 @@ require 'user_model.php';
                         /**
                          * get all products of the last order
                          */
-                        $obj_order_product = user_ORM::getInstance();
+                        $obj_order_product = ORM::getInstance();
                         $obj_order_product->setTable('order_product');
 
                         $order_products = $obj_order_product->select(array('order_id' => $order_id));
-
+                        $i = 1;
                         while ($current_product = $order_products->fetch_assoc()) {
-                            echo "Amount: " . $current_product['amount'];
-                            echo " totalPrice: " . $current_product['total_price'];
-
-                            //get the name of product and all it`s info
-                            $obj_product_info = user_ORM::getInstance();
-                            $obj_product_info->setTable('products');
-
-                            $product_info_array = $obj_product_info->select(array('id' => $current_product['product_id']));
-                            $product_info = $product_info_array->fetch_assoc();
-
-                            echo " Name: " . $product_info['name'];
                             ?>
-                            <img src="<?php echo "../images/products/" . $product_info['pic']; ?>" width="100px" height="100px">
-                            <br>  
+                            <div class="col-md-<?php echo $i + 1; ?>">
+                                <?php
+                                ?>
+                                <div class="row">
+                                    <?php
+                                    echo "Amount: " . $current_product['amount'];
+                                    ?>
+                                </div>
+                                <div class="row">
+                                    <?php
+                                    echo " totalPrice: " . $current_product['total_price'];
+                                    ?>
+                                </div>
+                                <?php
+                                //get the name of product and all it`s info
+                                $obj_product_info = ORM::getInstance();
+                                $obj_product_info->setTable('products');
+
+                                $product_info_array = $obj_product_info->select(array('id' => $current_product['product_id']));
+                                $product_info = $product_info_array->fetch_assoc();
+                                ?>
+                                <div class="row">
+                                    <?php
+                                    echo " Name: " . $product_info['name'];
+                                    ?>
+                                </div>
+                                <div class="row">
+                                    <img src="<?php echo "../images/products/" . $product_info['pic']; ?>" class="img-responsive img-circle"  width="120px" height="120px">
+                                </div>
+                            </div>
+
                             <?php
+                            $i = $i + 1;
                         }
                     } else {
                         echo "NO Orders!!";
                     }
                     ?>
-
                 </div>
-                <div class="list_products">
-                    All Products:
-                    <br/>
+                <div class="row">
+                    <div class="row panel-body">
 
-                    <?php
-                    /**
-                     * Select all products
-                     */
-                    $obj_product = user_ORM::getInstance();
-                    $obj_product->setTable('products');
-                    $products = $obj_product->select(array("is_available" => 1));
+                        <div class="panel panel-heading">
 
-                    //if there is more than one product while loop every time fetch row
-                    if ($products->num_rows > 0) {
+                            <h1>Menu</h1>
+                        </div>
 
-                        while ($row = $products->fetch_assoc()) {
-                            ?>
-                            <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="100px" height="100px"
-                                 onclick="add_product('<?php echo $row['name']; ?>',<?php echo $row['id']; ?>,<?php echo $row['price']; ?>)">
-                                 <?php
-                             }
-                         } else {
-                             echo "NO Products!!";
-                         }
-                         ?>
-                </div>
-
-            </div>
-            <div class="create_order" id="create_order">
-
-                <form method="post"  >
-                    <div class="create_order_products" id="create_order_products">
-
-                    </div>
-                    <br/>
-                    <br/>
-                    Notes <textarea name='notes' id="notes"></textarea><br>
-                    Room <select name="room">
                         <?php
                         /**
-                         * get all rooms numbers
+                         * Select all products
                          */
-                        $obj_rooms = user_ORM::getInstance();
-                        $obj_rooms->setTable('rooms');
+                        $obj_product = ORM::getInstance();
+                        $obj_product->setTable('products');
+                        $products = $obj_product->select(array("is_available" => 1));
 
-                        $all_rooms = $obj_rooms->select_all();
-
-                        if ($all_rooms->num_rows > 0) {
-
-                            while ($room = $all_rooms->fetch_assoc()) {
-                                foreach ($room as $key => $value) {
-                                    ?>
-                                    <option value="<?php $room['number'] ?>"><?php echo $room['number'] ?>
-                                        <?php
-                                    }
-                                }
-                            } else {
+                        //if there is more than one product while loop every time fetch row
+                        if ($products->num_rows > 0) {
+                            $j = 1;
+                            while ($row = $products->fetch_assoc()) {
                                 ?>
-                            <option>NO Rooms
+                                <div class="col-md-<?php echo $j + 1; ?>">
+                                    <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="120px" height="120px" class="img-responsive img-circle"
+                                         onclick="add_product('<?php echo $row['name']; ?>',<?php echo $row['id']; ?>,<?php echo $row['price']; ?>)">
+                                </div>
                                 <?php
+                                $j = $j + 1;
                             }
-                            ?>
-                    </select>
-                    <br>
-                    <br>
-
-                    <input type='submit' name='confirm' value='Confirm' onclick="get_order()"><br/>
-                    <label id="total_price">Total Price: 0</label>
-                </form>
+                        } else {
+                            echo "NO Products!!";
+                        }
+                        ?>
+                    </div>
+                </div>
             </div>
+
         </div>
-
-
         <script>
-            
+
             //global array of products id 
             var products_id = [];
             /**
@@ -210,15 +201,18 @@ require 'user_model.php';
                     elem_product.setAttribute("class", "product");
                     //create label for product with it`s name
                     var elem_product_name = document.createElement("label");
-                    elem_product_name.innerHTML = name;
+                     elem_product_name.setAttribute("class"," control-label");
+                    elem_product_name.innerHTML = "  Name: "+name;
                     //create input field for amount of product
                     var elem_product_amount = document.createElement("input");
+                    elem_product_amount.setAttribute("class","form-control");
                     elem_product_amount.setAttribute("type", "text");
                     elem_product_amount.setAttribute("name", "amount");
                     elem_product_amount.setAttribute("value", "1");
                     //create label for product with it`s price
                     var elem_product_price = document.createElement("label");
-                    elem_product_price.innerHTML = price;
+                    elem_product_price.setAttribute("class"," control-label");
+                    elem_product_price.innerHTML ="  Price: "+price;
 
                     //appeand parameter
                     elem_product.appendChild(elem_product_name);
@@ -235,23 +229,23 @@ require 'user_model.php';
                     elem_exists_product.childNodes[1].setAttribute("value", value);
                     //increase the price by increase it`s amount
                     var new_price = price * value;
-                    elem_exists_product.childNodes[2].innerHTML = new_price;
+                    elem_exists_product.childNodes[2].innerHTML ="  Price: "+new_price;
                 }
                 //set the total price of the order in the label of total price
                 //by select all products dev and get it`s price
-                
+
                 var total_price = 0;
-
+                
                 var products = document.getElementsByClassName("product");
-                for (var i = 0; i < products.length; i++) {
 
-                    total_price += parseInt(products[i].childNodes[2].innerHTML);
+                for (var i = 0; i < products.length; i++) {
+                    total_price += parseInt(products[i].childNodes[2].innerHTML.split(" ")[3]);
                 }
 
                 var elem_order_price = document.getElementById("total_price");
-                elem_order_price.innerHTML = "Total Price: "+total_price;
-                
-                
+                elem_order_price.innerHTML = "Total Price: " + total_price;
+
+
 
             }
 
@@ -261,69 +255,73 @@ require 'user_model.php';
              */
 
             function get_order() {
-                
-                
+
+
                 //check if the form order has childs of products or not
                 var elem_order = document.getElementById("create_order_products");
-                
+
                 if (elem_order.childElementCount > 0) {
-                    
+
                     //get value of all price of order
                     var elem_order_price = document.getElementById("total_price");
                     var orderPrice = elem_order_price.innerHTML.split(" ");
- 
+
                     //get all order notes
-                    var elem_order_notes=document.getElementById("notes").value;
-                    
-                    var product_info="";
-                    
+                    var elem_order_notes = document.getElementById("notes").value;
+
+                    //get room name from the select
+                    var elem_order_room = document.getElementById("room");
+                    var order_room = elem_order_room.options[elem_order_room.selectedIndex].text;
+
+                    var product_info = "";
+
                     //forloop to get all product and send it in array to request
-                    for(var i=1;i<=elem_order.childElementCount;i++){
-                        
-                        var all_products=elem_order.childNodes;
-                        
+                    for (var i = 1; i <= elem_order.childElementCount; i++) {
+
+                        var all_products = elem_order.childNodes;
+
                         //console.log(all_products[1]);
-                        var product=all_products[i];
-                        
+                        var product = all_products[i];
+
                         //alert(product.nodeType ? "true" : "false" );
 
-                        var product_id=product.getAttribute("id");
-                        
-                        
-                        var product_amount=product.childNodes[1].value;
-                        
-                        var product_price=product.childNodes[2].innerHTML;
-                        
-                        
-                         product_info+=product_id+":"+product_amount+":"+product_price+",";
-                        
+                        var product_id = product.getAttribute("id");
+
+
+                        var product_amount = product.childNodes[1].value;
+
+                        var product_price = product.childNodes[2].innerHTML.split(" ")[3];
+
+
+                        product_info += product_id + ":" + product_amount + ":" + product_price + ",";
+
                     }
 
                     //open xmlhttp request that render to user_order and send total order & products
                     var xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open("POST","user_order.php",true);
-                    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                    xmlhttp.send("order_price="+orderPrice[2]+"&notes="+elem_order_notes+"&array="+product_info);
-                    
-                    //on change check even the request send or not
-                  
-                    xmlhttp.onreadystatechange =function () {
-      
-                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                           
-                        console.log(xmlhttp.responseText);
-                        
-                    }
-              };
-              
-            }
-            
+                    xmlhttp.open("POST", "user_order.php", true);
+                    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xmlhttp.send("order_price=" + orderPrice[2] + "&room=" + order_room + "&notes=" + elem_order_notes + "&array=" + product_info);
 
-          }
+                    //on change check even the request send or not
+
+                    xmlhttp.onreadystatechange = function () {
+
+                        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+
+                            console.log(xmlhttp.responseText);
+
+                        }
+                    };
+
+                }
+
+
+            }
 
         </script>
-        
+
+
 
     </body>
-
 </html>

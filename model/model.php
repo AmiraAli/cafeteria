@@ -3,21 +3,21 @@
 require 'appconf.php';
 
 /**
- * this class contain all orm of users
+ * this class contain all orm functions
  */
-class user_ORM {
+class ORM {
 
     static $conn;
     private $dbconn;
     protected $table;
 
     /**
-     * static function to get instance of user_orm
+     * static function to get instance of orm
      * @return type
      */
     static function getInstance() {
         if (self::$conn == null) {
-            self::$conn = new user_ORM();
+            self::$conn = new ORM();
         }
         return self::$conn;
     }
@@ -77,7 +77,6 @@ class user_ORM {
             return $this->dbconn->error;
         }
         return $state;
-        
     }
 
     /**
@@ -100,27 +99,48 @@ class user_ORM {
         }
         return $state->fetch_assoc();
     }
+
     /**
      * Select with Where conditions
      * @param type $values
      * @return type
      */
-    function select($values){
-		$query="select * from ".$this->table." where ";
-		foreach($values as $key =>$value)
-		{
-			$query.=$key." = '".$value."' and ";
-		}
-		$query=explode(" ",$query);
-		unset($query[count($query)-2]);
-		$query=implode(" ",$query);
+    function select($values) {
+        $query = "select * from " . $this->table . " where ";
+        foreach ($values as $key => $value) {
+            $query.=$key . " = '" . $value . "' and ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
 
-		$result =  $this->dbconn->query(trim($query));
+        $result = $this->dbconn->query(trim($query));
 
-		return $result;
+        return $result;
+    }
 
-	}
+    /**
+     * Delete with Where conditions
+     * @param type $values
+     * @return type
+     */
+    function delete($values) {
+        $query = "delete from " . $this->table . " where ";
+        foreach ($values as $key => $value) {
+            $query.=$key . " = '" . $value . "' and ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
 
+        $result = $this->dbconn->query(trim($query));
+
+        if (!$result) {
+            return $this->dbconn->error;
+        }
+
+        return $this->dbconn->affected_rows;
+    }
 
     /**
      * deconstractor to close connection
