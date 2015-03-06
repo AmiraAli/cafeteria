@@ -2,15 +2,9 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-        <group/>
-=======
         <group>
-            <file>file:/var/www/html/cafeteria/admin/admin_header.php</file>
-            <file>file:/var/www/html/cafeteria/admin/manual_order.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_home.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_order.php</file>
+            <file>file:/var/www/html/cafeteria/jquery-2.1.3.min.js</file>
         </group>
->>>>>>> b8a4236db27bf22289dfdf2595e25de439de7208
     </open-files>
 </project-private>
