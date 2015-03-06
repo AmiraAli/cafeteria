@@ -146,6 +146,14 @@ require 'user_header.php';
                             <h1>Menu</h1>
                         </div>
 
+<<<<<<< HEAD
+                    </div>
+                    <br/>
+                    <br/>
+                    Notes <textarea name='notes'></textarea><br>
+                    Room <select name="room" class="form-control">
+=======
+>>>>>>> b8a4236db27bf22289dfdf2595e25de439de7208
                         <?php
                         /**
                          * Select all products
