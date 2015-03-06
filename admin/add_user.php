@@ -132,7 +132,7 @@
                                 }
 
                                 //saving data of user in database 
-                                @$db = mysqli_connect('localhost', 'root', '1234', 'cafeteria');
+                                @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
                                 if (mysqli_connect_errno()) {
                                     echo $error = 'Could not connect to database. Please try again later.';
                                     exit;

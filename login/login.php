@@ -1,12 +1,13 @@
 
 <?php
+session_start();
 ini_set("display_errors", 1);
 include('validate.php');
-require 'login_model.php';
+require '../model/model.php';
 $flag = false;
 
 
-$obj = login_ORM::getInstance();
+$obj = ORM::getInstance();
 $obj->setTable('users');
 
 $valid = new validator();
@@ -14,56 +15,45 @@ $valid = new validator();
 if (!empty($_POST['submit'])) {
     $flag = true;
 
-    //check validations
-    
+//check validations
+
     $check = $valid->empty_fields($_POST);
-    if (gettype($check) == "array") {
-        for ($i = 0; $i < count($check); $i++) {
-            echo $check[$i] . "<br/>";
-        }
-        $flag = false;
-    }
-   
+
     $error = $valid->valid_email($_POST['email']);
     if (gettype($error) == "string") {
         $flag = false;
     }
-    
+
 
     if ($flag == true) {
-
-        //check information from database
+//check information from database
         $email = $_POST['email'];
-        $password = md5($_POST['password']) ;
-        echo $password;
+        $password = md5($_POST['password']);
         $user_values = array("email" => $email, "password" => $password);
         $results = $obj->select($user_values);
         $row = $results->fetch_assoc();
-        $name = $row['name'];
-        if ($row) {         
-            session_start();
-            $_SESSION['login_user'] = $name;          
-            setcookie ('cookie', $name,time() + (86400 * 30));
-            print_r( $_COOKIE ['cookie']);
-           
-            //Redirecting To Other Page
-            header("location: ../user/user_home.php");
-        } else {
-            echo "you must register first";
+
+// user exists
+        if ($row) {
+
+// Information concerning ANY user.
+            $_SESSION['user_name'] = $row['name'];
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['user_pic'] = $row['pic'];
+
+// Info concerning admin ONLY. Should enter if condition if the user
+// is an admin.
+            if ($row['is_admin'] == "1") {
+                $_SESSION['is_admin'] = true;
+                header('Location: ../admin/admin_home.php');
+            } else
+                header('Location: ../user/user_home.php');
         }
-
-
-//        if (!$row) {
-//            echo "you must register first";
-//        } else {
-//             foreach ($row as $key => $value) {
-//                  echo $key . " " . $value . "<br/>";
-//                 
-//             }
-////            foreach ($row->results() as $obj) {
-////                echo $obj->$username, '<br>';
-////            }
-//        }
+        
+        if(!$row)
+        {
+            $emptyErr="no such email or password you must register first";
+        }
     }
 }
 ?>
@@ -77,18 +67,19 @@ if (!empty($_POST['submit'])) {
 
     </head>
     <header>
-         <style>
-             .error
-             {
-                 color: red;
-             }
+        <style>
+            .error
+            {
+                color: red;
+            }
             .container{
 
-                background-image: url("../images/products/tea_with_milk.jpg");
                 background-repeat: no-repeat;
+                 border-style: solid;
+                border-width: 9px; 
                 background-size: cover;
                 height: 600px;
-                
+
 
             }
             .jumbotron
@@ -98,21 +89,28 @@ if (!empty($_POST['submit'])) {
                 margin-top: 100px;
                 background-color:rgba(192,192,192,0.7);
             }
-            </style>
-            
+        </style>
+
     </header>
     <body>
         <div class="container">
-            
-                <div class="form-group-lg"></div>
-                <div class="jumbotron">
+
+            <div class="form-group-lg"></div>
+            <div class="jumbotron">
 
                 <form  method="post" action="login.php" class="form-horizontal">
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
                             <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email">
-                            <span class="error"><?php if(isset($error)){ echo $error;} ?></span>
+                            <span class="error"><?php
+                                if (isset($error) && !empty($_POST['email'])) {
+                                    echo $error;
+                                }
+                                if (isset($valid->errors['email']))
+                                    echo $valid->errors['email'];
+                                ?>
+                            </span>
 
                         </div>
                     </div>
@@ -120,6 +118,10 @@ if (!empty($_POST['submit'])) {
                         <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
                         <div class="col-sm-10">
                             <input type="password" name="password" class="form-control"  placeholder="Password">
+                            <span class="error"><?php
+                                if (isset($valid->errors['password']))
+                                    echo $valid->errors['password'];
+                                ?></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -133,13 +135,17 @@ if (!empty($_POST['submit'])) {
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" value="submit" name="submit" class="btn btn-default">
+                            <input type="submit" value="submit" name="submit" class="btn btn-default"><br>
+                            <span class="error"><?php
+                                if (isset ($emptyErr))
+                                    echo $emptyErr;
+                                ?></span> 
                         </div>
                     </div>
 
                 </form>
-                </div>
-            
+            </div>
+
         </div>
     </body>
 </html>

@@ -2,11 +2,11 @@
 <?php
 ini_set("display_errors", 1);
 require_once 'validate.php';
-require_once  'login_model.php';
+require '../model/model.php';
 $flag = false;
 
 
-$obj = login_ORM::getInstance();
+$obj = ORM::getInstance();
 $obj->setTable('users');
 
 $valid = new validator();
@@ -40,12 +40,11 @@ if (!empty($_POST['submit'])) {
       $row = $results->fetch_assoc();
 //      var_dump($row);
       $name = $row['name'];
+      $email=$row['email'];
       $passwordb=$row['password'];
       $data=array('password'=>md5($password));
-      echo $name;
-      $filters = array('name'=>$name);
+      $filters = array('name'=>$name,'email'=>$email);
       $update= $obj->update($filters,$data);
-      var_dump($row2);
      
     }
     else{
@@ -67,15 +66,40 @@ if (!empty($_POST['submit'])) {
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
        
     </head>
-    <header> <script>
+    <header> 
+       <style>
              .error
              {
                  color: red;
              }
-             </script></header>
+            .container{
+
+                border-style: solid;
+                border-width: 9px; 
+                background-repeat: no-repeat;
+                background-size: cover;
+                height: 600px;
+                
+
+            }
+            .jumbotron
+            {
+                width: 800px;
+                margin-left: 180px;
+                margin-top: 100px;
+                background-color:rgb(0,0,255,0.3);
+            }
+            .h1{
+                
+            }
+            </style>
+    </header>
+    
     <body>
         <h1>reset password</h1>
         <div class="container">
+            <div class="form-group-lg"></div>
+                <div class="jumbotron">
             <form  method="post" action="reset_password.php" class="form-horizontal">
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">new password</label>
@@ -92,9 +116,6 @@ if (!empty($_POST['submit'])) {
                     </div>
                 </div>
 
-
-
-
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <input class="btn btn-success btn-sm" type='submit' name='submit' value='check'>
@@ -104,6 +125,7 @@ if (!empty($_POST['submit'])) {
                 </div>
 
             </form>
+                </div>
         </div>
     </body>
 </html>
