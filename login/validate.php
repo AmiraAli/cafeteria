@@ -55,7 +55,7 @@ class validator{
 		{
 			if(empty($value)){
 			
-				$this->errors[]="$key is required";
+				$this->errors[$key]="$key is required";
 			}
 		}
 		if(count($this->errors)){

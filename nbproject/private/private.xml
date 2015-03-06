@@ -11,6 +11,10 @@
             <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
             <file>file:/var/www/html/cafeteria/user/user_home.php</file>
         </group>
+<<<<<<< HEAD
 >>>>>>> 7281bec5cf6f1b9380da94396f05817fd2cc7200
+=======
+>>>>>>> b8a4236db27bf22289dfdf2595e25de439de7208
+>>>>>>> cd0ca317bcda20c0fd13203cb8fc6b5f31620a60
     </open-files>
 </project-private>

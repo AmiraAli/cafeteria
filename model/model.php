@@ -148,7 +148,7 @@ class ORM {
      * @param type $where
      * @return type
      */
-    function update($set, $where) {
+    function update($where,$set) {
         $query = "update " . $this->table . " set ";
         foreach ($set as $key => $value) {
             $query.=$key . " = '" . $value . "' , ";
@@ -165,8 +165,6 @@ class ORM {
         $query = explode(" ", $query);
         unset($query[count($query) - 2]);
         $query = implode(" ", $query);
-
-
         $result = $this->dbconn->query(trim($query));
 
         if (!$result) {
