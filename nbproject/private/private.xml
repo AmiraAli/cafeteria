@@ -6,27 +6,10 @@
         <group/>
 =======
         <group>
-
-            <file>file:/var/www/html/cafeteria/user/user_get_orders.php</file>
-            <file>file:/var/www/html/cafeteria/model/model.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_order.php</file>
+            <file>file:/var/www/html/cafeteria/admin/admin_header.php</file>
+            <file>file:/var/www/html/cafeteria/admin/manual_order.php</file>
             <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
             <file>file:/var/www/html/cafeteria/user/user_home.php</file>
-
-            <file>file:/var/www/html/cafeteria/login/login.php</file>
-            <file>file:/var/www/html/cafeteria/login/myorder.php</file>
-            <file>file:/var/www/html/cafeteria/login/checks.php</file>
-
-
-            <file>file:/var/www/html/cafeteria/user/user_model.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_order.php</file>
-
-
-            <file>file:/var/www/cafeteria/admin/add_user.php</file>
-            <file>file:/var/www/cafeteria/admin/validation.php</file>
-
-
-
         </group>
 >>>>>>> b8a4236db27bf22289dfdf2595e25de439de7208
     </open-files>

@@ -190,6 +190,29 @@ class ORM {
 
         return $result;
     }
+    
+    /**
+     * select query to get sumtion of specific colum and group by specific colum by where conditions
+     * between specific date
+     */
+    function select_sum($col_sum,$values,$col_group_by,$datecol,$date_from,$date_to) {
+        $query = "select sum(".$col_sum.") from " . $this->table . " where( ".$datecol." between '".$date_from."' and '".$date_to."') and ";
+        foreach ($values as $key => $value) {
+            $query.=$key . " = '" . $value . "' and ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
+
+        $query.=" group by ".$col_group_by;
+        
+        $result = $this->dbconn->query(trim($query));
+
+        return $result;
+    }
+    
+    
+    
 
     /**
      * deconstractor to close connection
