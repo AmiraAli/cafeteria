@@ -13,7 +13,7 @@ class validator {
     // make validation for password
     function valid_password($password, $confirm_password) {
         if ($password == $confirm_password) {
-            return true;
+            return "";
         } else {
             return "invalid password type it again" . "<br>";
         }
@@ -30,7 +30,7 @@ class validator {
         if (count($this->errors)) {
             return $this->errors;
         } else {
-            return true;
+            return "";
         }
     }
     // make validation for image
@@ -54,7 +54,7 @@ class validator {
             }
         }
         // check on image type 
-        if ($image_type != 'image/jpeg' && 'image/jpg') {
+        if ($image_type != 'image/jpeg' && $image_type != 'image/png'&& $image_type !='image/gif' ) {
             return " Upload failed" . "<br/>";
         }
     }

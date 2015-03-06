@@ -2,7 +2,71 @@
 include('validation.php');
 require '../model/model.php';
 require './admin_header.php';
-?>
+
+
+                $valid = new validator();
+                $data = new ORM();
+                if (!empty($_POST['save'])) {
+                    $flag = true;
+                    
+//                    var_dump( $_POST);
+                    // check on validation 
+                    $check = $valid->empty_fields($_POST);
+                    if (gettype($check) == "array") {
+                        for ($i = 0; $i < count($check); $i++) {
+                            echo $check[$i] . "<br/>";
+                        }
+                        $flag = false;
+                    }
+
+                    //check on image 
+                    echo $error = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
+                    if (gettype($error) == "string") {
+                        $flag = false;
+                    }
+
+                    if ($flag == true) {
+
+                        //save image 
+
+                        $upfile = '/var/www/html/cafeteria/images/products/' . $_FILES['productfile']['name'];
+                        if (is_uploaded_file($_FILES['productfile']['tmp_name'])) {
+                            if (!move_uploaded_file($_FILES['productfile']['tmp_name'], $upfile)) {
+                                echo 'can`t upload your image  ' . "<br/>";
+                            }
+                        }
+
+//                        //saving data of user in database 
+//                        @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
+//                        if (mysqli_connect_errno()) {
+//                            echo $error = 'Could not connect to database. Please try again later.';
+//                            exit;
+//                        }
+                        // insert data into database 
+                        $obj_category = ORM::getInstance();
+                        $obj_category->setTable('categories');
+                        $all_data=$obj_category->select(array('name' => $_POST['category']));
+                        $current_cat = $all_data->fetch_assoc();
+                        $id=$current_cat['id'];
+                        
+                        $obj = ORM::getInstance();
+                        $obj->setTable('products');
+                        //var_dump($_POST);
+                       // exit;
+                        if(empty($_POST['checkbox'])){
+                            $is_avaliable="0";
+                        }else{
+                            $is_avaliable=$_POST['checkbox'];
+                        }
+                         $obj->insert(array("name" => $_POST['product'], "price" => $_POST['price'], "category_id"=>$id, "is_available"=>$is_avaliable,"pic" => $_FILES['productfile']['name']));
+                         header("Location: http://localhost/cafeteria/admin/all_products.php");
+//                        mysqli_close($db);
+                    }
+                }
+                
+                ?>
+
+
 
 <html>
     <head>
@@ -91,7 +155,7 @@ require './admin_header.php';
 
                         <div class="form-group" class="checkbox">
                             <label>  
-                                <input type="checkbox" name="checkbox"> Is available
+                                <input type="checkbox" name="checkbox" value="1"> Is available
                             </label>
                         </div>
 
@@ -103,65 +167,7 @@ require './admin_header.php';
                         </div>
                         </div>
                         </div>
-        <?php
-
-                $valid = new validator();
-                $data = new ORM();
-                if (!empty($_POST['save'])) {
-                    $flag = true;
-                    
-//                    var_dump( $_POST);
-                    // check on validation 
-                    $check = $valid->empty_fields($_POST);
-                    if (gettype($check) == "array") {
-                        for ($i = 0; $i < count($check); $i++) {
-                            echo $check[$i] . "<br/>";
-                        }
-                        $flag = false;
-                    }
-
-                    //check on image 
-                    echo $error = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
-                    if (gettype($error) == "string") {
-                        $flag = false;
-                    }
-
-                    if ($flag == true) {
-
-                        //save image 
-
-                        $upfile = '/var/www/cafeteria/images/products/' . $_FILES['productfile']['name'];
-                        if (is_uploaded_file($_FILES['productfile']['tmp_name'])) {
-                            if (!move_uploaded_file($_FILES['productfile']['tmp_name'], $upfile)) {
-                                echo 'can`t upload your image  ' . "<br/>";
-                            }
-                        }
-
-                        //saving data of user in database 
-                        @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
-                        if (mysqli_connect_errno()) {
-                            echo $error = 'Could not connect to database. Please try again later.';
-                            exit;
-                        }
-                        // insert data into database 
-                        $obj_category = ORM::getInstance();
-                        $obj_category->setTable('categories');
-                        $all_data=$obj_category->select(array('name' => $_POST['category']));
-                        $current_cat = $all_data->fetch_assoc();
-                        $id=$current_cat['id'];
-                        
-                        $obj = ORM::getInstance();
-                        $obj->setTable('products');
-                        
-                        echo $obj->insert(array("name" => $_POST['product'], "price" => $_POST['price'], "category_id"=>$id, "is_available"=>$_POST['checkbox'],"pic" => $_FILES['productfile']['name']));
-
-                        mysqli_close($db);
-                    }
-                }
-                
-                ?>
-
-
+       
 
 </form>
 </body>

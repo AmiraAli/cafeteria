@@ -31,8 +31,9 @@ require 'admin_header.php';
             $check = $valid->empty_fields($_POST);
             if (gettype($check) == "array") {
                 for ($i = 0; $i < count($check); $i++) {
-//                                v $check[$i] . "<br/>";
+//                                $check[$i] . "<br/>";
                 }
+               // var_dump($check);
                 $flag = false;
             }
 
@@ -40,7 +41,6 @@ require 'admin_header.php';
 //          echo $error = $valid->valid_password(md5($_POST['password']), md5($_POST['confirmpassword']));
 
 //             $error = $valid->valid_email($_POST['email']);
-            echo $error = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
             if (gettype($error) == "string") {
                 $flag = false;
             }
@@ -49,7 +49,7 @@ require 'admin_header.php';
 
                 //save image 
 
-                $upfile = '/var/www/cafeteria/images/users/' . $_FILES['userfile']['name'];
+                $upfile = '/var/www/html/cafeteria/images/users/' . $_FILES['userfile']['name'];
                 if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
                     if (!move_uploaded_file($_FILES['userfile']['tmp_name'], $upfile)) {
                         echo 'can`t upload your image  ' . "<br/>";
@@ -57,20 +57,20 @@ require 'admin_header.php';
                     }
                 }
 
-                //saving data of user in database 
-                @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
-                if (mysqli_connect_errno()) {
-                    echo $error = 'Could not connect to database. Please try again later.';
-                    exit;
-                }
+//                //saving data of user in database 
+//                @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
+//                if (mysqli_connect_errno()) {
+//                    echo $error = 'Could not connect to database. Please try again later.';
+//                    exit;
+//                }
                 // insert data into database 
                 $obj = ORM::getInstance();
                 $obj->setTable('users');
-                echo $obj->insert(array("name" => $_POST['name'], "email" => $_POST['email'], "password" => md5($_POST['password']), "room_no" => $_POST['roomno'], "ext" => $_POST['ext'], "is_admin" => 0, "question" => $_POST['securityquestion'], "answer" => $_POST['answer'], "pic" => $_FILES['userfile']['name']));
+                $obj->insert(array("name" => $_POST['name'], "email" => $_POST['email'], "password" => md5($_POST['password']), "room_no" => $_POST['roomno'], "ext" => $_POST['ext'], "is_admin" => 0, "question" => $_POST['securityquestion'], "answer" => $_POST['answer'], "pic" => $_FILES['userfile']['name']));
+                header("Location: http://localhost/cafeteria/admin/all_users.php");
 
 
-
-                mysqli_close($db);
+//                mysqli_close($db);
             }
         }
         ?>
@@ -132,7 +132,7 @@ require 'admin_header.php';
                             <label> Room No.</label>
                             <input class="form-control" type='text' name='roomno'placeholder="Enter your room no ..">
                             <span> <?php
-                            if (isset($check[4])) {
+                            if (isset($check[3])) {
                                 echo " This field is required ";
                             }
                             ?> </span>
@@ -141,7 +141,7 @@ require 'admin_header.php';
                             <label> Ext..</label>
                             <input class="form-control" type='text' name='ext'placeholder="Enter your ext number..." >
                             <span> <?php
-                            if (isset($check[5])) {
+                            if (isset($check[4])) {
                                 echo " This field is required ";
                             }
                             ?> </span>
@@ -150,14 +150,14 @@ require 'admin_header.php';
                         <div class="form-group">
                             <label> Profile Picture</label>
                             <input type="file" name="userfile" id="profilepicture">
-                          
+
                         </div>
 
                         <div class="form-group"> 
                             <label> Security question</label>
                             <input class="form-control" type="text" name="securityquestion" placeholder="Type the question here..." >
                             <span> <?php
-                                if (isset($check[7])) {
+                                if (isset($check[5])) {
                                     echo " This field is required ";
                                 }
                             ?> </span>
@@ -167,7 +167,7 @@ require 'admin_header.php';
                             <label> Answer </label>
                             <input class="form-control" type="text" name="answer" placeholder="Type the answer here..." >
                             <span> <?php
-                                if (isset($check[8])) {
+                                if (isset($check[6])) {
                                     echo " This field is required ";
                                 }
                             ?> </span>

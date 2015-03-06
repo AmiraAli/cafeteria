@@ -15,16 +15,7 @@ require 'user_header.php';
     </head>
     <body>
 
-<<<<<<< HEAD
-        <div class="header">
-            <a href="user_home.php">HOME</a>
-            <a href="user_orders.php">My Orders</a>
-            <p><?php   session_start(); 
-                       $admin=$_SESSION['user_name'];
-                       echo $admin;
-            ?></p>
-        </div>
-=======
+
         <!--        <div class="header">
           
                     <p>//<?php
@@ -34,8 +25,6 @@ require 'user_header.php';
 //            
         ?></p>
                 </div>-->
->>>>>>> 7281bec5cf6f1b9380da94396f05817fd2cc7200
-
 
         <div class="container">
             <div class="col-md-3 panel panel-default"  id="create_order">
@@ -158,20 +147,7 @@ require 'user_header.php';
                             <h1>Menu</h1>
                         </div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    </div>
-                    <br/>
-                    <br/>
-                    Notes <textarea name='notes'></textarea><br>
-                    Room <select name="room" class="form-control">
-=======
->>>>>>> b8a4236db27bf22289dfdf2595e25de439de7208
-=======
 
-
-
->>>>>>> 7281bec5cf6f1b9380da94396f05817fd2cc7200
                         <?php
                         /**
                          * Select all products
