@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group/>
+=======
+        <group>
+            <file>file:/var/www/html/cafeteria/admin/admin_header.php</file>
+            <file>file:/var/www/html/cafeteria/admin/manual_order.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
+            <file>file:/var/www/html/cafeteria/user/user_home.php</file>
+        </group>
+>>>>>>> 7281bec5cf6f1b9380da94396f05817fd2cc7200
     </open-files>
 </project-private>
