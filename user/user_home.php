@@ -15,22 +15,23 @@ require 'user_header.php';
     </head>
     <body>
 
-        <div class="header">
-            <a href="user_home.php">HOME</a>
-            <a href="user_orders.php">My Orders</a>
-            <p><?php   session_start(); 
-                       $admin=$_SESSION['login_user'];
-                       echo $admin;
-            ?></p>
-        </div>
+        <!--        <div class="header">
+          
+                    <p>//<?php
+        //   session_start(); 
+//                       $admin=$_SESSION['login_user'];
+//                       echo $admin;
+//            
+        ?></p>
+                </div>-->
 
 
         <div class="container">
             <div class="col-md-3 panel panel-default"  id="create_order">
                 <div class="panel panel-heading">
 
-                        <h1>   Order  </h1>
-                    </div>
+                    <h1>   Order  </h1>
+                </div>
                 <form method="post"  >
                     <div class="row panel-body" id="create_order_products">
 
@@ -146,14 +147,9 @@ require 'user_header.php';
                             <h1>Menu</h1>
                         </div>
 
-<<<<<<< HEAD
-                    </div>
-                    <br/>
-                    <br/>
-                    Notes <textarea name='notes'></textarea><br>
-                    Room <select name="room" class="form-control">
-=======
->>>>>>> b8a4236db27bf22289dfdf2595e25de439de7208
+
+
+
                         <?php
                         /**
                          * Select all products
@@ -209,21 +205,33 @@ require 'user_header.php';
                     elem_product.setAttribute("class", "product");
                     //create label for product with it`s name
                     var elem_product_name = document.createElement("label");
-                     elem_product_name.setAttribute("class"," control-label");
-                    elem_product_name.innerHTML = "  Name: "+name;
+                    elem_product_name.setAttribute("class", " control-label");
+                    elem_product_name.innerHTML = "  Name: " + name;
                     //create input field for amount of product
                     var elem_product_amount = document.createElement("input");
-                    elem_product_amount.setAttribute("class","form-control");
-                    elem_product_amount.setAttribute("type", "text");
+                    elem_product_amount.setAttribute("class", "form-control");
+                    elem_product_amount.setAttribute("type", "number");
                     elem_product_amount.setAttribute("name", "amount");
                     elem_product_amount.setAttribute("value", "1");
+                    elem_product_amount.setAttribute("min", "1");
+                    elem_product_amount.setAttribute("onclick", "add_amount(" + id + "," + price + ")");
+
                     //create label for product with it`s price
                     var elem_product_price = document.createElement("label");
-                    elem_product_price.setAttribute("class"," control-label");
-                    elem_product_price.innerHTML ="  Price: "+price;
+                    elem_product_price.setAttribute("class", " control-label");
+                    elem_product_price.innerHTML = "  Price: " + price;
+
+                    //create button to cancel product
+                    var cancel_btn = document.createElement("button");
+                    cancel_btn.innerHTML = "x";
+                    cancel_btn.setAttribute("class", "btn btn-danger pull-right ");
+
+                    
+                    cancel_btn.setAttribute("onclick", "cancel(" +id+")");
 
                     //appeand parameter
                     elem_product.appendChild(elem_product_name);
+                    elem_product.appendChild(cancel_btn);
                     elem_product.appendChild(elem_product_amount);
                     elem_product.appendChild(elem_product_price);
                     elem_order.appendChild(elem_product);
@@ -232,22 +240,22 @@ require 'user_header.php';
                     //get the div of product by it`s id number
                     var elem_exists_product = document.getElementById(id);
                     //get value of the product and increase it by one
-                    var value = elem_exists_product.childNodes[1].value;
+                    var value = elem_exists_product.childNodes[2].value;
                     value = parseInt(value) + 1;
-                    elem_exists_product.childNodes[1].setAttribute("value", value);
+                    elem_exists_product.childNodes[2].setAttribute("value", value);
                     //increase the price by increase it`s amount
                     var new_price = price * value;
-                    elem_exists_product.childNodes[2].innerHTML ="  Price: "+new_price;
+                    elem_exists_product.childNodes[3].innerHTML = "  Price: " + new_price;
                 }
                 //set the total price of the order in the label of total price
                 //by select all products dev and get it`s price
 
                 var total_price = 0;
-                
+
                 var products = document.getElementsByClassName("product");
 
                 for (var i = 0; i < products.length; i++) {
-                    total_price += parseInt(products[i].childNodes[2].innerHTML.split(" ")[3]);
+                    total_price += parseInt(products[i].childNodes[3].innerHTML.split(" ")[3]);
                 }
 
                 var elem_order_price = document.getElementById("total_price");
@@ -296,9 +304,9 @@ require 'user_header.php';
                         var product_id = product.getAttribute("id");
 
 
-                        var product_amount = product.childNodes[1].value;
+                        var product_amount = product.childNodes[2].value;
 
-                        var product_price = product.childNodes[2].innerHTML.split(" ")[3];
+                        var product_price = product.childNodes[3].innerHTML.split(" ")[3];
 
 
                         product_info += product_id + ":" + product_amount + ":" + product_price + ",";
@@ -325,6 +333,78 @@ require 'user_header.php';
                 }
 
 
+            }
+
+            /**
+             * this function used to increase the amount of product when changing it by hand
+             * @param {type} id
+             * @param {type} price
+             * @returns {undefined}
+             */
+
+            function add_amount(id, price) {
+
+                //get the div of product by it`s id number
+                var elem_exists_product = document.getElementById(id);
+                //get value of the product 
+                var value = elem_exists_product.childNodes[2].value;
+                value = parseInt(value);
+                //if condition to make the value of product not decrease about 1
+                if (value < 1) {
+                    value = 1;
+                    elem_exists_product.childNodes[2].setAttribute("value", value);
+                }
+                //increase the price by increase it`s amount
+                var new_price = price * value;
+                elem_exists_product.childNodes[3].innerHTML = "  Price: " + new_price;
+
+                //set the total price of the order in the label of total price
+                //by select all products dev and get it`s price
+
+                var total_price = 0;
+
+                var products = document.getElementsByClassName("product");
+
+                for (var i = 0; i < products.length; i++) {
+                    total_price += parseInt(products[i].childNodes[3].innerHTML.split(" ")[3]);
+                }
+
+                var elem_order_price = document.getElementById("total_price");
+                elem_order_price.innerHTML = "Total Price: " + total_price;
+
+            }
+            
+            /**
+             * cancel function to cancel request of certain product
+             */
+            function cancel(id,price) {
+                //get the div of product by it`s id number
+                var elem_exists_product = document.getElementById(id);
+                
+                //remove the product request
+                elem_exists_product.remove();
+                
+                //remove the id of element from the array
+                var index = products_id.indexOf(id)
+                if (index > -1) {
+                    products_id.splice(index, 1);
+                }
+
+                //set the total price of the order in the label of total price
+                //by select all products dev and get it`s price
+
+                var total_price = 0;
+
+                var products = document.getElementsByClassName("product");
+
+                for (var i = 0; i < products.length; i++) {
+                    total_price += parseInt(products[i].childNodes[3].innerHTML.split(" ")[3]);
+                }
+
+                var elem_order_price = document.getElementById("total_price");
+                elem_order_price.innerHTML = "Total Price: " + total_price;
+                
+                
             }
 
         </script>
