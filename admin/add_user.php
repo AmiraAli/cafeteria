@@ -40,10 +40,10 @@ require 'admin_header.php';
 //          echo $error = $valid->valid_password(md5($_POST['password']), md5($_POST['confirmpassword']));
 
 //             $error = $valid->valid_email($_POST['email']);
-//            echo $error = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
-//            if (gettype($error) == "string") {
-//                $flag = false;
-//            }
+            echo $error = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
+            if (gettype($error) == "string") {
+                $flag = false;
+            }
 
             if ($flag == true) {
 
@@ -150,14 +150,7 @@ require 'admin_header.php';
                         <div class="form-group">
                             <label> Profile Picture</label>
                             <input type="file" name="userfile" id="profilepicture">
-                            <span> <?php
-                            if(isset($_POST['save'])){
-                                echo $error = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
-                                   if (gettype($error) == "string") {
-                                    $flag = false;
-                                }
-                            }
-                            ?> </span>
+                          
                         </div>
 
                         <div class="form-group"> 
