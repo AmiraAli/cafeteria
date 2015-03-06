@@ -1,10 +1,11 @@
 <?php
 
-include('database.php');
+require '../model/model.php';
+
 
     $id = $_GET['id'];
     
-    $user= admin_ORM::getInstance();
+    $user= ORM::getInstance();
     $user->setTable('users');
     $user_data = $user->select(array('id' => $id));
     if ($user_data->num_rows > 0) {

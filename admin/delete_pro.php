@@ -1,10 +1,11 @@
 <?php
 
-include('database.php');
+require '../model/model.php';
+
 
     $id = $_GET['id'];
 
-    $product= admin_ORM::getInstance();
+    $product= ORM::getInstance();
     $product->setTable('products');
     $product_data = $product->select(array('id' => $id));
     

@@ -6,7 +6,7 @@
 $GLOBALS['conf'] = array(
     'host'=>'localhost',
     'username'=>'root',
-    'password' =>'1234',
+    'password' =>'admin',
     'database' =>'cafeteria'
 );
 

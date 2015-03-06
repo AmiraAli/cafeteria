@@ -1,5 +1,6 @@
 <?php
-include('database.php');
+require '../model/model.php';
+require './admin_header.php';
 ?>
 <html>
     <head>
@@ -18,20 +19,7 @@ include('database.php');
     <body>
 
 
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header"> </div>
-                <div>
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Product</a></li>
-                        <li><a href="#">Users</a></li>
-                        <li><a href="#">Manual orders</a></li>
-                        <li><a href="#">Checks</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+       
 
 
         <div class="container">
@@ -49,7 +37,7 @@ include('database.php');
                                         <td>Action</td>
                                      </tr>
                                      <?php
-                                        $user_data = admin_ORM::getInstance();
+                                        $user_data = ORM::getInstance();
                                         $user_data->setTable('users');
                                         $all_data = $user_data->select_all();
                                         

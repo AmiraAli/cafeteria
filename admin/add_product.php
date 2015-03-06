@@ -1,6 +1,7 @@
 <?php
 include('validation.php');
-include('database.php');
+require '../model/model.php';
+require './admin_header.php';
 ?>
 
 <html>
@@ -19,21 +20,6 @@ include('database.php');
 
     <body>
 
-
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header"> </div>
-                <div>
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Product</a></li>
-                        <li><a href="#">Users</a></li>
-                        <li><a href="#">Manual orders</a></li>
-                        <li><a href="#">Checks</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
 
 
         <div class="container">
@@ -61,7 +47,7 @@ include('database.php');
                                 /**
                                  * get all categories from datbase 
                                  */
-                                $obj_categories = admin_ORM::getInstance();
+                                $obj_categories =ORM::getInstance();
                                 $obj_categories->setTable('categories');
 
                                 $all_categories = $obj_categories->select_all();
@@ -120,7 +106,7 @@ include('database.php');
         <?php
 
                 $valid = new validator();
-                $data = new admin_ORM();
+                $data = new ORM();
                 if (!empty($_POST['save'])) {
                     $flag = true;
                     
@@ -158,13 +144,13 @@ include('database.php');
                             exit;
                         }
                         // insert data into database 
-                        $obj_category = admin_ORM::getInstance();
+                        $obj_category = ORM::getInstance();
                         $obj_category->setTable('categories');
                         $all_data=$obj_category->select(array('name' => $_POST['category']));
                         $current_cat = $all_data->fetch_assoc();
                         $id=$current_cat['id'];
                         
-                        $obj = admin_ORM::getInstance();
+                        $obj = ORM::getInstance();
                         $obj->setTable('products');
                         
                         echo $obj->insert(array("name" => $_POST['product'], "price" => $_POST['price'], "category_id"=>$id, "is_available"=>$_POST['checkbox'],"pic" => $_FILES['productfile']['name']));
