@@ -49,9 +49,8 @@ require './admin_header.php';
 
                             if ($all_data->num_rows > 0) {
                                 for ($i = 0; $i < $all_data->num_rows; $i++) {
-                                    while ($user = $all_data->fetch_assoc()) {
-//                                                    
-//                                                    
+                                    while ($user = $all_data->fetch_assoc()) {            
+                                                 
                                         ?>
                                         <tr>
                                             <td> <?php echo $user['name']; ?></td>
@@ -61,10 +60,8 @@ require './admin_header.php';
                                             <td> <?php echo $user['ext']; ?></td>
 
                                             <td> <a href="delete.php?id=<?php echo $user['id']; ?>" >Delete</a>
-                                                <a href="edit.php?id=<?php echo $user['id']; ?>" >Edit</a> </td>
-
-
-
+                                                <a href="edit.php?id=<?php echo $user['id']; ?>" >Edit</a> 
+                                            </td>
 
                                         </tr>
 

@@ -5,23 +5,31 @@ require './admin_header.php';
 
 
                 $valid = new validator();
-                $data = new ORM();
+                if (!empty($_GET)) {
+                    $product_data = explode(",", $_GET['product1']);
+                }
+                
                 if (!empty($_POST['save'])) {
+                     if (empty($_POST['product_update'])) {
+                         
                     $flag = true;
-                    
-//                    var_dump( $_POST);
+
                     // check on validation 
                     $check = $valid->empty_fields($_POST);
                     if (gettype($check) == "array") {
                         for ($i = 0; $i < count($check); $i++) {
-                            echo $check[$i] . "<br/>";
+                             $check[$i] . "<br/>";
                         }
                         $flag = false;
                     }
+                    
+                    if (count($check) == 1 && $check[0] == 'product_update is required') {
+                    $flag = true;
+                }
 
                     //check on image 
-                    echo $error = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
-                    if (gettype($error) == "string") {
+                    $error_image = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
+                    if (gettype($error_image) == "string") {
                         $flag = false;
                     }
 
@@ -29,19 +37,14 @@ require './admin_header.php';
 
                         //save image 
 
-                        $upfile = '/var/www/html/cafeteria/images/products/' . $_FILES['productfile']['name'];
+                        $upfile = '/var/www/cafeteria/images/products/' . $_FILES['productfile']['name'];
                         if (is_uploaded_file($_FILES['productfile']['tmp_name'])) {
                             if (!move_uploaded_file($_FILES['productfile']['tmp_name'], $upfile)) {
                                 echo 'can`t upload your image  ' . "<br/>";
                             }
                         }
 
-//                        //saving data of user in database 
-//                        @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
-//                        if (mysqli_connect_errno()) {
-//                            echo $error = 'Could not connect to database. Please try again later.';
-//                            exit;
-//                        }
+
                         // insert data into database 
                         $obj_category = ORM::getInstance();
                         $obj_category->setTable('categories');
@@ -59,10 +62,63 @@ require './admin_header.php';
                             $is_avaliable=$_POST['checkbox'];
                         }
                          $obj->insert(array("name" => $_POST['product'], "price" => $_POST['price'], "category_id"=>$id, "is_available"=>$is_avaliable,"pic" => $_FILES['productfile']['name']));
-                         header("Location: http://localhost/cafeteria/admin/all_products.php");
+                        header("Location: http://localhost/cafeteria/admin/all_products.php");
 //                        mysqli_close($db);
                     }
                 }
+               else{
+                $flag = true;
+                $check = $valid->empty_fields($_POST);
+                if (gettype($check) == "array") {
+                    $flag = false;
+                    for ($i = 0; $i < count($check); $i++) {
+                        $check[$i];
+                    }
+                }
+
+                $error_image = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
+                if (gettype($error_image) == "string") {
+                    $flag = false;
+                }
+
+                //check on password&email&image 
+               
+                if ($flag == true) {
+                    $upfile = '/var/www/cafeteria/images/products/' . $_FILES['productfile']['name'];
+                    if (is_uploaded_file($_FILES['productfile']['tmp_name'])) {
+                        if (!move_uploaded_file($_FILES['productfile']['tmp_name'], $upfile)) {
+                            echo 'can`t upload your image  ' . "<br/>";
+                            exit();
+                        }
+                    }
+
+                $obj_category = ORM::getInstance();
+                $obj_category->setTable('categories');
+                $all_data=$obj_category->select(array('name' => $_POST['category']));
+                $current_cat = $all_data->fetch_assoc();
+                $id=$current_cat['id'];
+                        
+                        
+                $product_data = explode(",", $_POST['product_update']);
+                $obj = ORM::getInstance();
+                $obj->setTable('products');
+                if(empty($_POST['checkbox'])){
+                            $is_avaliable="0";
+                        }else{
+                            $is_avaliable=$_POST['checkbox'];
+                        }
+                
+                $updated = $obj->update(array('id' => $product_data[0]), array("name" => $_POST['product'], "price" => $_POST['price'], "category_id"=>$id, "is_available"=>$is_avaliable,"pic" => $_FILES['productfile']['name']));
+                echo $updated;
+                header("Location: http://localhost/cafeteria/admin/all_products.php");
+            }
+            else{
+                $product=$_POST['product_update'];
+                header("Location: http://localhost/cafeteria/admin/add_product.php?product1=$product");
+            }
+               }
+                
+    }
                 
                 ?>
 
@@ -92,21 +148,51 @@ require './admin_header.php';
 
 
                     <form  method='post' action='add_product.php' enctype="multipart/form-data" class="form-signin">
+                    <input type="hidden" name="product_update" value="<?php if (isset($_GET['product1'])) {
+                        echo $_GET['product1'];
+                    } ?>">
                         <h4> Add Product </h4>
                         <div class="form-group">
                             <label>Product</label>
-                            <input class="form-control" type='text' name='product'placeholder="Enter product name..."  >
+                            <input class="form-control" type='text' name='product'placeholder="Enter product name..." value="<?php 
+                             if (!empty($_POST['product'])) {
+                                    echo $_POST['product'];
+                             }
+                             
+                             if (!empty($_GET)) {
+                                echo $product_data[1];
+                            }
+                            ?>" >
+                            <span> <?php
+                                if (isset($check[0]) && (empty($_POST['product']))) {
+                                    echo " This field is required ";
+                                }
+                                ?>
+                            </span>
                         </div>
 
                         <div class="form-group">
                             <label>Price</label> 
-                            <input class="form-control" type='number' name='price'placeholder="Enter price here...">  
+                            <input class="form-control" type='number' name='price'placeholder="Enter price here..." value="<?php 
+                             if (!empty($_POST['price'])) {
+                                    echo $_POST['price'];
+                                }
+                                 if (!empty($_GET)) {
+                                echo $product_data[2];
+                            }
+                            ?>">  
+                             <span> <?php
+                                if (isset($check[1]) && (empty($_POST['price']))) {
+                                    echo " This field is required ";
+                                }
+                                ?>
+                            </span>
                         </div>
 
                         <div class="form-group" id="1">
                             <label>Categories</label>
 
-                            <select class="form-control" name="category">
+                            <select class="form-control" name="category" >
                                 <?php
                                 /**
                                  * get all categories from datbase 
@@ -151,12 +237,20 @@ require './admin_header.php';
                         <div class="form-group">
                             <label> Product Picture</label>
                             <input type="file" name="productfile" id="profilepicture">
+                                <span> <?php
+                                if (isset($error_image)) {
+                                 echo $error_image ; 
+                                }
+                                
+                                ?>    
+                            </span>
                         </div>
 
                         <div class="form-group" class="checkbox">
                             <label>  
                                 <input type="checkbox" name="checkbox" value="1"> Is available
                             </label>
+                            
                         </div>
 
                         <input class="btn btn-success btn-sm" type='submit' name='save' value='Save'>

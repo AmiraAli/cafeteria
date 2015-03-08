@@ -13,7 +13,7 @@ require '../model/model.php';
     if ($product_data->num_rows > 0) {
         for ($i=0;$i<$product_data->num_rows;$i++){
              while($product1= $product_data->fetch_assoc()){
-            unlink("/var/www/html/cafeteria/images/products/".trim($product1['pic']));
+            unlink("/var/www/cafeteria/images/products/".trim($product1['pic']));
             
         }
     }

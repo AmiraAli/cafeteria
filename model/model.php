@@ -45,6 +45,7 @@ class ORM {
      */
     function setTable($table) {
         $this->table = $table;
+        
     }
 
     /**
@@ -113,7 +114,6 @@ class ORM {
         $query = explode(" ", $query);
         unset($query[count($query) - 2]);
         $query = implode(" ", $query);
-
         $result = $this->dbconn->query(trim($query));
 
         return $result;
