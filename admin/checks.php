@@ -48,7 +48,7 @@ require '../model/model.php';
                         $obj_users = ORM::getInstance();
                         $obj_users->setTable('users');
 
-                        $all_users = $obj_users->select_all();
+                        $all_users = $obj_users->select(array('is_admin'=>0));
 
                         if ($all_users->num_rows > 0) {
 
@@ -159,7 +159,7 @@ require '../model/model.php';
                     var xmlhttp = new XMLHttpRequest();
                     xmlhttp.open("POST", "admin_get_check_user.php", true);
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xmlhttp.send("dateTo=" + date_to + "&dateFrom=" + date_from + "&user_name=" + user_name);
+                    xmlhttp.send("dateTo=" + date_to+" 23:59:59"+ "&dateFrom=" + date_from+" 00:00:00"+ "&user_name=" + user_name);
 
                     //on change check even the request send or not and get the values of response
 
@@ -274,7 +274,7 @@ require '../model/model.php';
                         var xmlhttp = new XMLHttpRequest();
                         xmlhttp.open("POST", "admin_get_checks_order.php", true);
                         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                        xmlhttp.send("dateTo=" + date_to + "&dateFrom=" + date_from + "&user_id=" + user_id);
+                        xmlhttp.send("dateTo=" + date_to+" 23:59:59"+ "&dateFrom=" + date_from+" 00:00:00" + "&user_id=" + user_id);
 
                         //on change check even the request send or not and get the values of response
 
