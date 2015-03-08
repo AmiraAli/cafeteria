@@ -28,7 +28,7 @@ class ORM {
     function __construct() {
 
         extract($GLOBALS['conf']);
-        $this->dbconn = new mysqli($host, $username, $password, $database);
+        $this->dbconn = new mysqli($host, $username, '1234', $database);
     }
 
     /**
@@ -77,6 +77,15 @@ class ORM {
             return $this->dbconn->error;
         }
         return $state;
+    }
+
+    /**     * select all sorted decreasing */ 
+    function select_all_sorted($col_sorted) {
+        $query = "SELECT * FROM " . $this->table . " ORDER BY " . $col_sorted . " DESC";
+        $state = $this->dbconn->query($query);
+        if (!$state) {
+            return $this->dbconn->error;
+        } return $state;
     }
 
     /**
@@ -148,7 +157,7 @@ class ORM {
      * @param type $where
      * @return type
      */
-    function update($where,$set) {
+    function update($where, $set) {
         $query = "update " . $this->table . " set ";
         foreach ($set as $key => $value) {
             $query.=$key . " = '" . $value . "' , ";
@@ -177,8 +186,8 @@ class ORM {
     /**
      * select between two dates with where conditions
      */
-    function select_date($datecol,$date_from, $date_to,$values) {
-        $query = "select * from " . $this->table . " where( ".$datecol." between '".$date_from."' and '".$date_to."') and ";
+    function select_date($datecol, $date_from, $date_to, $values) {
+        $query = "select * from " . $this->table . " where( " . $datecol . " between '" . $date_from . "' and '" . $date_to . "') and ";
         foreach ($values as $key => $value) {
             $query.=$key . " = '" . $value . "' and ";
         }
@@ -190,13 +199,13 @@ class ORM {
 
         return $result;
     }
-    
+
     /**
      * select query to get sumtion of specific colum and group by specific colum by where conditions
      * between specific date
      */
-    function select_sum($col_sum,$values,$col_group_by,$datecol,$date_from,$date_to) {
-        $query = "select sum(".$col_sum.") from " . $this->table . " where( ".$datecol." between '".$date_from."' and '".$date_to."') and ";
+    function select_sum($col_sum, $values, $col_group_by, $datecol, $date_from, $date_to) {
+        $query = "select sum(" . $col_sum . ") from " . $this->table . " where( " . $datecol . " between '" . $date_from . "' and '" . $date_to . "') and ";
         foreach ($values as $key => $value) {
             $query.=$key . " = '" . $value . "' and ";
         }
@@ -204,15 +213,12 @@ class ORM {
         unset($query[count($query) - 2]);
         $query = implode(" ", $query);
 
-        $query.=" group by ".$col_group_by;
-        
+        $query.=" group by " . $col_group_by;
+
         $result = $this->dbconn->query(trim($query));
 
         return $result;
     }
-    
-    
-    
 
     /**
      * deconstractor to close connection

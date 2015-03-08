@@ -72,6 +72,12 @@ if (!empty($_POST['submit'])) {
             {
                 color: red;
             }
+            .background
+            {
+                background-image: url("../images/products/coffee.jpg");
+               	background-size: cover;
+                background-repeat: no-repeat;
+            }
             .container{
 
                 background-repeat: no-repeat;
@@ -94,6 +100,7 @@ if (!empty($_POST['submit'])) {
     </header>
     <body>
         <div class="container">
+            <div class="background" >
 
             <div class="form-group-lg"></div>
             <div class="jumbotron">
@@ -145,7 +152,7 @@ if (!empty($_POST['submit'])) {
 
                 </form>
             </div>
-
+            </div>
         </div>
     </body>
 </html>

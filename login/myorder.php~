@@ -1,0 +1,194 @@
+<?php
+<html>
+  <body>
+    <head>
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+        <link href="login.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css">
+        <script src="../bootstrap/js/bootstrap.min.js"></script>
+    </head>
+    <header>
+        <style>
+            .background{
+                background-repeat: no-repeat;
+                background-size: cover;
+                height: 1100px;
+
+
+            }
+
+            .jumbotron
+            {
+                width: 800px;
+                padding-top: 30px; 
+                padding-bottom: 30px;
+                margin-left: 180px;
+                margin-top: -100px;
+                background-color:rgba(192,192,192,0.7);
+            }
+            #first
+            {
+                height:300px; 
+                width: 800px;
+                margin-top: 1px;
+                margin-left: 180px;
+            }
+
+            #second
+
+            {
+                width: 800px;
+                padding-top: 30px; 
+                padding-bottom: 30px;
+                margin-left: 180px;
+                margin-top: 0px;
+                background-color:rgba(192,192,192,0.7);
+
+            }
+
+
+            #third
+            {
+                height:300px; 
+                width: 800px;
+                margin-top: 1px;
+                margin-left: 180px;
+
+            }
+
+
+        </style>      
+
+    </header>
+<?php
+/** * get all products of the last order */ 
+require '../model/model.php';
+
+$obj_order = ORM::getInstance(); 
+$obj_order->setTable('orders');
+$all=$obj_order->select('id');
+$order= $obj_order->select_all_sorted('datetime'); 
+$i = 1;
+while ($current_product = $order->fetch_assoc()) 
+{ 
+?> 
+<div class="col-md-<?php echo $i + 1; ?>"> 
+    <?php ?> <div class="row">
+    <?php echo "order date: " . $current_product['datetime']; ?>
+    </div>
+    <div class="row"> 
+        <?php echo " totalPrice: " . $current_product['order_price']; ?> 
+    </div> 
+    <?php
+    //get the name of product and all it`s info 
+    $obj_product_info = ORM::getInstance();
+    $obj_product_info->setTable('order_product');
+    $product_info_array = $obj_product_info->select(array('id' => $current_product['order_id']));
+    $product_info = $product_info_array->fetch_assoc();
+    ?> <div class="row"> 
+        <?php echo " Name: " . $product_info['name']; 
+        ?> 
+    </div> 
+<div class="row"> <img src="<?php 
+    echo "../images/products/" . $product_info['pic']; 
+    ?>" class="img-responsive img-circle" width="120px" height="120px"> 
+    </div>
+</div> 
+<?php
+$i = $i + 1;
+
+
+ 
+
+?> </div>
+
+  
+    <div class="container">
+        <div class="background">
+            <nav class="navbar navbar-inverse">
+
+                <div class="navbar-header"> </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#">Product</a></li>
+                        <li><a href="#">Users</a></li>
+                        <li><a href="#">Manual orders</a></li>
+                        <li><a href="#">Checks</a></li>
+                    </ul>
+                </div>
+
+            </nav>
+            ]
+
+            <h1 style="color:beige;">my orders</h1>
+
+            <div class="jumbotron"  >
+                <table class=" table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order date</th>
+                            <th>name</th>
+                            <th>Room No </th>
+                            <th>EXT</th>
+                            <th>action</th>
+                        </tr>  
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td>
+
+
+                    </tbody>
+
+                </table>     
+
+            </div>
+            <div class="jumbotron" id="first">
+                <table class=" table table-striped">
+
+                </table> 
+            </div>
+
+            <div class="jumbotron" id="second">
+                <table class=" table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order date</th>
+                            <th>name</th>
+                            <th>Room No </th>
+                            <th>EXT</th>
+                            <th>action</th>
+                        </tr>  
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                            <td></td>            
+                    </tbody>
+                </table> 
+
+            </div>
+            <div class="jumbotron" id="third">
+                <table class=" table table-striped">
+
+                </table> 
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<?php } ?>
+</html>
+?>
+
