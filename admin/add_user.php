@@ -31,18 +31,23 @@ require 'admin_header.php';
             $check = $valid->empty_fields($_POST);
             if (gettype($check) == "array") {
                 for ($i = 0; $i < count($check); $i++) {
-//                                $check[$i] . "<br/>";
+//                               p $check[$i] . "<br/>";
                 }
-               // var_dump($check);
+                // var_dump($check);
                 $flag = false;
             }
 
 //            //check on password&email&image 
-//          echo $error = $valid->valid_password(md5($_POST['password']), md5($_POST['confirmpassword']));
-
-//             $error = $valid->valid_email($_POST['email']);
-             $error = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
-            if (gettype($error) == "string") {
+             $error_password = $valid->valid_password(md5($_POST['password']), md5($_POST['confirmpassword']));
+            if (gettype($error_password) == "string") {
+                $flag = false;
+            }
+                $error_email = $valid->valid_email($_POST['email']);
+            if (gettype($error_email) == "string") {
+                $flag = false;
+            }
+            $error_image = $valid->valid_image($_FILES['userfile']['error'], $_FILES['userfile']['type']);
+            if (gettype($error_image) == "string") {
                 $flag = false;
             }
 
@@ -58,12 +63,7 @@ require 'admin_header.php';
                     }
                 }
 
-//                //saving data of user in database 
-//                @$db = mysqli_connect('localhost', 'root', 'admin', 'cafeteria');
-//                if (mysqli_connect_errno()) {
-//                    echo $error = 'Could not connect to database. Please try again later.';
-//                    exit;
-//                }
+
                 // insert data into database 
                 $obj = ORM::getInstance();
                 $obj->setTable('users');
@@ -71,7 +71,7 @@ require 'admin_header.php';
                 header("Location: http://localhost/cafeteria/admin/all_users.php");
 
 
-//                mysqli_close($db);
+
             }
         }
         ?>
@@ -90,92 +90,93 @@ require 'admin_header.php';
                             }
                             ?>"  
                                    <span> <?php
-                            if (isset($check[0])) {
-                                echo " This field is required ";
-                            }
-                                  
-                            ?> </span>
+                                       if (isset($check[0]) && empty($_POST['name'])) {
+                                           echo " This field is required ";
+                                       }
+                                       ?> </span>
                         </div>
 
                         <div class="form-group">
                             <label>Email</label> 
                             <input class="form-control" type='text' name='email'placeholder="Enter your email..." value="<?php
-                            if (!empty($_POST['email'])) {
-                                echo $_POST['email'];
-                            }
-                            ?>"  > 
+                                if (!empty($_POST['email'])) {
+                                    echo $_POST['email'];
+                                }
+                                       ?>"  > 
                             <span> <?php
-                            if(isset($_POST['save'])){
-                                echo $error = $valid->valid_email($_POST['email']);
+                            if (isset($error_email)) {
+                                echo $error_email;
                             }
-                            ?> </span>
+                                      ?> </span>
                         </div>
 
                         <div class="form-group">
                             <label> Password </label>
                             <input class="form-control" type='password' name='password'placeholder="Enter your password...">
                             <span> <?php
-                            if (isset($check[2])) {
+                            if (isset($check[2])  && empty($_POST['password'])) {
                                 echo " This field is required ";
                             }
-                            ?> </span>
+                                       ?> </span>
                         </div>
 
                         <div class="form-group">
                             <label> Confirmed password </label>
                             <input class="form-control" type='password' name='confirmpassword'placeholder="Enter password again...">
-                            <span> <?php if (isset($_POST['save']) ) {
-                                echo $error = $valid->valid_password(md5($_POST['password']), md5($_POST['confirmpassword']));
-                            } ?> </span>
+                            <span> <?php
+                            if (isset($error_password)) {
+                                echo $error_password;
+                            }
+                                       ?> </span>
                         </div>
 
                         <div class="form-group">   
                             <label> Room No.</label>
                             <input class="form-control" type='text' name='roomno'placeholder="Enter your room no ..">
                             <span> <?php
-                            if (isset($check[3])) {
-                                echo " This field is required ";
-                            }
-                            ?> </span>
+                                if (isset($check[3])  && empty($_POST['roomno'])) {
+                                    echo " This field is required ";
+                                }
+                                ?> </span>
                         </div>
                         <div class="form-group"> 
                             <label> Ext..</label>
                             <input class="form-control" type='text' name='ext'placeholder="Enter your ext number..." >
                             <span> <?php
-                            if (isset($check[4])) {
-                                echo " This field is required ";
-                            }
-                            ?> </span>
+                                if (isset($check[4])  && empty($_POST['ext'])) {
+                                    echo " This field is required ";
+                                }
+                                ?> </span>
                         </div>
 
                         <div class="form-group">
                             <label> Profile Picture</label>
                             <input type="file" name="userfile" id="profilepicture">
                             <span> <?php
-                            if(isset($_POST['save'])){
-                                echo $error ;
-                            }
-                            ?> </span>
+                                if (isset($error_image)) {
+                                    echo $error_image;
+                                }
+                                ?> </span>
                         </div>
 
                         <div class="form-group"> 
                             <label> Security question</label>
                             <input class="form-control" type="text" name="securityquestion" placeholder="Type the question here..." >
                             <span> <?php
-                                if (isset($check[5])) {
+                                if (isset($check[5])  && empty($_POST['securityquestion'])) {
                                     echo " This field is required ";
                                 }
-                            ?> </span>
+                                ?> </span>
                         </div>
 
                         <div class="form-group"> 
                             <label> Answer </label>
                             <input class="form-control" type="text" name="answer" placeholder="Type the answer here..." >
                             <span> <?php
-                                if (isset($check[6])) {
+                                if (isset($check[6]) && empty($_POST['answer'])) {
                                     echo " This field is required ";
                                 }
-                            ?> </span>
+                                ?> </span>
                         </div>
 
                         <input class="btn btn-success btn-sm" type='submit' name='save' value='Save'>

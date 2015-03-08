@@ -20,8 +20,8 @@ require './admin_header.php';
                     }
 
                     //check on image 
-                    echo $error = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
-                    if (gettype($error) == "string") {
+                    $error_image = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
+                    if (gettype($error_image) == "string") {
                         $flag = false;
                     }
 
@@ -151,6 +151,12 @@ require './admin_header.php';
                         <div class="form-group">
                             <label> Product Picture</label>
                             <input type="file" name="productfile" id="profilepicture">
+                            <span> <?php
+                                if (isset($error_image)) {
+                                    echo $error_image;
+                                }
+                                ?> 
+                            </span>
                         </div>
 
                         <div class="form-group" class="checkbox">

@@ -211,18 +211,23 @@ class ORM {
         return $result;
     }
     /**
-     * select all sorted decreasing
+     * select all sorted decreasing by where not equal
      */
     
-    function select_all_sorted($col_sorted) {
-        $query = "SELECT * FROM " . $this->table." ORDER BY ".$col_sorted." DESC";
-        $state = $this->dbconn->query($query);
-        if (!$state) {
-            return $this->dbconn->error;
+    function select_all_sorted($col_sorted,$values) {
+        $query = "SELECT * FROM " . $this->table. " where ";
+        foreach ($values as $key => $value) {
+            $query.=$key . " != '" . $value . "' and ";
         }
-        return $state;
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
+        $query.=" ORDER BY ".$col_sorted." DESC";
+        $result = $this->dbconn->query(trim($query));
+
+        return $result;
     }
-    
+
     
 
     /**
