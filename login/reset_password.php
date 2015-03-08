@@ -87,44 +87,45 @@ if (!empty($_POST['submit'])) {
             {
                 color: red;
             }
-            .container{
-
-                border-style: solid;
-                border-width: 9px; 
-                background-repeat: no-repeat;
-                background-size: cover;
-                height: 600px;
-
-
-            }
-            .jumbotron
+            
+             .jumbotron
             {
-                width: 800px;
-                margin-left: 180px;
+                width: 600px;
+                margin-left: 500px;
                 margin-top: 100px;
-                background-color:rgb(0,0,255,0.3);
+                background-color:rgba(102,51,0,0.7);
             }
-            .h1{
+      .col-lg-12{
+                background-image: url("../images/products/2.jpg");
+               	background-size: cover;
+                background-repeat: no-repeat;    
+                height: 800px;
+
+
 
             }
         </style>
     </header>
 
     <body>
-        <h1>reset password</h1>
+        
+        <div class="col-lg-12"> 
         <div class="container">
             <div class="form-group-lg"></div>
             <div class="jumbotron">
+                <h2 class="col-md-offset-3"  style="color: white" style="color: white">resert password
+                </h2>
+                            
                 <form  method="post" action="reset_password.php" class="form-horizontal">
                     <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">new password</label>
+                        <label for="inputPassword3" class="col-sm-2 control-label" style="color: white">new password</label>
                         <div class="col-sm-10">
                             <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">confirm password</label>
+                        <label for="inputPassword3" class="col-sm-2 control-label" style="color: white">confirm password</label>
                         <div class="col-sm-10">
                             <input type="password" name="confirmpassword" class="form-control" id="inputPassword3" placeholder="Password">
                             <span class="error" ><?php if (isset($error)) echo $error; ?></span> 
@@ -133,7 +134,7 @@ if (!empty($_POST['submit'])) {
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input class="btn btn-success btn-sm" type='submit' name='submit' value='check'>
+                            <input class="btn btn-success btn-sm" type='submit' name='submit' value='check' style="margin-left: 130px">
 
                         </div>
 
@@ -141,6 +142,7 @@ if (!empty($_POST['submit'])) {
 
                 </form>
             </div>
+        </div>
         </div>
     </body>
 </html>

@@ -60,9 +60,19 @@ require 'admin_header.php';
 
 
 
+                    $obj = ORM::getInstance();
+                    $obj->setTable('users');
 
 
                 if ($flag == true) {
+                    
+                     $email = $_POST['email'];
+                     $user_email = array('email'=>$email);
+                     $result_email = $obj->select($user_email);
+                     $var = $result_email->fetch_assoc();
+                     if(!$var)
+                     {  
+                       
                     $upfile = '/var/www/cafeteria/images/users/' . $_FILES['userfile']['name'];
                     if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
                         if (!move_uploaded_file($_FILES['userfile']['tmp_name'], $upfile)) {
@@ -71,12 +81,15 @@ require 'admin_header.php';
                         }
                     }
 
-                    $obj = ORM::getInstance();
-                    $obj->setTable('users');
+                 
                     $inserted = $obj->insert(array("name" => $_POST['name'], "email" => $_POST['email'], "password" => md5($_POST['password']), "room_no" => $_POST['roomno'], "ext" => $_POST['ext'], "is_admin" => 0, "question" => $_POST['securityquestion'], "answer" => $_POST['answer'], "pic" => $_FILES['userfile']['name']));
                     echo $inserted;
                     header("Location: http://localhost/cafeteria/admin/all_users.php");
                 }
+                
+                else { echo "email is exits" ;}
+              }
+              
             } else {
                 $flag = true;
                 $check = $valid->empty_fields($_POST);
@@ -84,6 +97,15 @@ require 'admin_header.php';
 
                     for ($i = 0; $i < count($check); $i++) {
                         $check[$i];
+
+            
+               
+                $upfile = '/var/www/html/cafeteria/images/users/' . $_FILES['userfile']['name'];
+                if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+                    if (!move_uploaded_file($_FILES['userfile']['tmp_name'], $upfile)) {
+                        echo 'can`t upload your image  ' . "<br/>";
+                        exit();
+
                     }
                     $flag = false;
                 }
@@ -128,6 +150,8 @@ require 'admin_header.php';
                     header("Location: http://localhost/cafeteria/admin/add_user.php?user1=$user");
                 }
             }
+        }
+        }
         }
         ?>
 
