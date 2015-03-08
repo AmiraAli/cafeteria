@@ -37,7 +37,7 @@
                         ?></p>
                      
                     <ul class="nav navbar-nav">
-                        <li class="active"><a  navbar-brandhref="user_home.php">Home</a></li>
+                        <li class="active"><a  navbar-brand href="user_home.php">Home</a></li>
                         <li><a href="user_orders.php">My Orders</a></li>
                     </ul>
                 </div>

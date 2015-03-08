@@ -8,12 +8,14 @@ class validator {
 
         if (!preg_match('/^[a-z]([a-z0-9]+|[a-z0-9\._-]+[a-z0-9]+)*@[a-z0-9]+\.[a-z]{2,4}+$/', $email) || empty($email)) {
             return "please enter valid mail equal to example@exp.exp" . "<br/>";
+        }else{
+            return true;
         }
     }
     // make validation for password
     function valid_password($password, $confirm_password) {
         if ($password == $confirm_password) {
-            return "";
+            return true;
         } else {
             return "invalid password type it again" . "<br>";
         }

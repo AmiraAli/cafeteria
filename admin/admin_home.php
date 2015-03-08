@@ -29,7 +29,8 @@ ini_set("display_errors", 0);
                 $obj_orders = ORM::getInstance();
                 $obj_orders->setTable('orders');
 
-                $all_orders = $obj_orders->select_all_sorted("datetime");
+                //select all products sorted by date and it`s status not equal to done
+                $all_orders = $obj_orders->select_all_sorted("datetime",array('status'=>'done'));
                 if ($all_orders->num_rows > 0) {
                     while ($order = $all_orders->fetch_assoc()) {
                         ?>
@@ -54,8 +55,8 @@ ini_set("display_errors", 0);
                                     <td><?php echo $order['room_id']; ?></td>
                                     <td><?php echo $user_info['ext']; ?></td>
                                     <td>                                   
-                                        <input type="radio" name="status" value="out for delivery" >Out for delivery<br>
-                                        <input type="radio" name="status" value="done" >Done<br>
+                                        <input type="radio" name="status" value="out for delivery"  onclick="action('<?php echo $order['id'] . " delivery"; ?>')">Out for delivery<br>
+                                        <input type="radio" name="status" value="done" onclick="action('<?php echo $order['id'] . " done"; ?>')">Done<br>
                                     </td>
                                 </tr>
                             </table>
@@ -201,20 +202,20 @@ ini_set("display_errors", 0);
                         deliver.setAttribute("type", "radio");
                         deliver.setAttribute("name", "status");
                         deliver.setAttribute("value", "out of delivery");
-                        
-                        var deliver_label=document.createElement("label");
+
+                        var deliver_label = document.createElement("label");
                         deliver_label.innerHTML = "Out of delivery";
 
                         var done = document.createElement("input");
                         done.setAttribute("type", "radio");
                         done.setAttribute("name", "status");
                         done.setAttribute("value", "done");
-                        
-                        var done_label=document.createElement("label");
+
+                        var done_label = document.createElement("label");
                         done_label.innerHTML = "Done";
 
-                        var br=document.createElement("br");
-                        
+                        var br = document.createElement("br");
+
                         td_action_info.appendChild(deliver);
                         td_action_info.appendChild(deliver_label);
                         td_action_info.appendChild(br);
@@ -246,13 +247,13 @@ ini_set("display_errors", 0);
                         elem_div_products.setAttribute("class", "row alert alert-success");
 
 
-                        for (var i = 0; i < recived_msg.products_count-1; i++) {
+                        for (var i = 0; i < recived_msg.products_count - 1; i++) {
 
 
                             var product_name = recived_msg.products[i].product_name;
-                            var product_pic_path =recived_msg.products[i].product_pic;
-                            var product_amount =recived_msg.products[i].product_amount;
-                            var product_totalPrice =recived_msg.products[i].product_price;
+                            var product_pic_path = recived_msg.products[i].product_pic;
+                            var product_amount = recived_msg.products[i].product_amount;
+                            var product_totalPrice = recived_msg.products[i].product_price;
 
                             var j = i + 2;
                             var product_colum = document.createElement("div");
@@ -305,23 +306,72 @@ ini_set("display_errors", 0);
 
 
                         }
-                        
-                        
-                       var elem_total_price=document.createElement("div");
-                       elem_total_price.setAttribute("class","row info badge pull-right");
-                       elem_total_price.setAttribute("height","50px");
-                       elem_total_price.innerHTML="Total: "+recived_msg.order_price;
+
+
+                        var elem_total_price = document.createElement("div");
+                        elem_total_price.setAttribute("class", "row info badge pull-right");
+                        elem_total_price.setAttribute("height", "50px");
+                        elem_total_price.innerHTML = "Total: " + recived_msg.order_price;
 
                         elem_order.appendChild(elem_order_table);
                         elem_order.appendChild(elem_total_price);
                         elem_order.appendChild(elem_div_products);
-                        
+
                         elem_orders_parent.insertBefore(elem_order, elem_orders_parent.firstChild);
                         break;
 
                 }
 
             };
+
+            /**
+             * function that take the action of radio button where out of delivery or done
+             */
+            function action(request) {
+                //get order_id that have the action 
+                var order_id = request.split(" ")[0];
+
+                var status = "";
+                //set status variable according to the action of click
+                switch (request.split(" ")[1]) {
+                    case "delivery":
+                        status = "out for delivery";
+                        break;
+                    case "done":
+                        status = "done";
+                        var elem_of_order_to_remove=document.getElementById(order_id);
+                        elem_of_order_to_remove.remove();
+                        break;
+                }
+
+                //open xmlhttp request that render to order_status to change it`s status
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "order_status.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                xmlhttp.send("order_id=" + order_id + "&status=" + status);
+
+                //on change check even the request send or not and get the values of response
+
+                xmlhttp.onreadystatechange = function () {
+
+                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+
+
+                        
+                        var msg = {
+                            action: "status",
+                            status_text:status,
+                            order_id: order_id,
+                        };
+
+                        //send msg as jason object
+                        exampleSocket.send(JSON.stringify(msg));
+                    }
+                };
+
+
+            }
         </script>
     </body>
 </html>

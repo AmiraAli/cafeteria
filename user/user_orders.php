@@ -10,7 +10,6 @@ require '../model/model.php';
         <link rel="stylesheet" href= "../bootstrap-3.3.2-dist/css/bootstrap-theme.css"> 
         <script src="../jquery-2.1.3.min.js" type="text/javascript"></script>
         <script src="../bootstrap-3.3.2-dist/js/bootstrap.js" type="text/javascript"></script>
-        <script src="user_orders.php"></script>
     </head>
     <body>
 
@@ -28,11 +27,11 @@ require '../model/model.php';
                     $dateto = date('Y-m-d') . " 23:59:59";
                     ?>
                     <label  class="col-sm-2 control-label"  >From:</label>
-                    <input class="form-control" type = 'date' name="date_from" id="date_from" value="<?php echo date('Y-m-d');  ?>">
+                    <input class="form-control" type = 'date' name="date_from" id="date_from" value="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="col-md-5">
                     <label  class="col-sm-2 control-label"  >To:</label>
-                    <input class="form-control" type = 'date'  tname="date_to" id="date_to" value="<?php echo date('Y-m-d');  ?>" >
+                    <input class="form-control" type = 'date'  tname="date_to" id="date_to" value="<?php echo date('Y-m-d'); ?>" >
                 </div>
                 <div class="col-sm-3 pull-right">
                     <button type="button" class="btn btn-success pull-right" onclick="select_orders()">Get my orders</button>
@@ -78,10 +77,12 @@ require '../model/model.php';
                                         ?>
                                         <td class="col-md-3"><button class=" col-md-5 btn btn-danger" id="<?php echo $order['id']; ?>" onclick="cancel('<?php echo $order['id']; ?>')">Cancel</button></td>
                                         <?php
-                                    }
-                                    ?>
-                                </tr>
-                                <?php
+                                    } else {
+                                        ?>
+                                        <td class="col-md-3"></td>
+                                    </tr>
+                                    <?php
+                                }
                             }
                         } else {
                             echo "No Recent orders!";
@@ -149,7 +150,7 @@ require '../model/model.php';
             var date_from = get_date_from();
             set_total_price(date_to, date_from, "<?php echo $_SESSION['user_name']; ?>");
 
-            
+
             /**
              * if there is the value for date to and date from select orders
              */
@@ -515,6 +516,58 @@ require '../model/model.php';
                     }
                 };
             }
+
+            /**
+             * this function to listen to recive status
+             * @param {type} event
+             * @returns {undefined}
+             */
+
+            exampleSocket.onmessage = function (event) {
+
+                //parse json object that recived from socket
+                var recived_msg = JSON.parse(event.data);
+
+                //alert(recived_msg.action);
+                switch (recived_msg.action) {
+
+                    case "status":
+
+                        var order_id = recived_msg.order_id;
+                        var status = recived_msg.status_text;
+
+
+                        //select order of tables and change it`s statues
+                        var elem_order = document.getElementById(order_id);
+                        var elem_order_childs = elem_order.childNodes;
+
+
+                        //set the status in the child of status only  and remove the cancel button
+
+                        if (elem_order_childs[1].innerHTML === "processing" || elem_order_childs[1].innerHTML === "out for delivery" || elem_order_childs[1].innerHTML === "done") {
+
+                            if (elem_order_childs[1].innerHTML === "processing") {
+                                elem_order_childs[3].childNodes[0].remove();
+                                elem_order_childs[3].innerHTML = " ";
+                            }
+                            elem_order_childs[1].innerHTML = status;
+
+                            
+
+                        } else {
+                            elem_order_childs[3].innerHTML = status;
+
+                            if (elem_order_childs[3].innerHTML === "processing") {
+                                elem_order_childs[7].childNodes[0].remove();
+                                elem_order_childs[7].innerHTML = " ";
+                            }
+                        }
+
+
+
+                        break;
+                }
+            };
 
 
         </script>
