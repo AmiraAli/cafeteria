@@ -63,6 +63,7 @@ require './admin_header.php';
                                                 }
                                                 ?></td>
                                             <td> <a href="delete_pro.php?id=<?php echo $category['id']; ?>" >Delete</a>
+                                                 <a href="edit_pro.php?id=<?php echo $category['id']; ?>" > Edit</a> 
                                             </td>
                                         </tr>
 

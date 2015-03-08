@@ -28,7 +28,7 @@ class ORM {
     function __construct() {
 
         extract($GLOBALS['conf']);
-        $this->dbconn = new mysqli($host, $username, '1234', $database);
+        $this->dbconn = new mysqli($host, $username,'1234', $database);
     }
 
     /**
@@ -45,6 +45,7 @@ class ORM {
      */
     function setTable($table) {
         $this->table = $table;
+        
     }
 
     /**
@@ -79,14 +80,7 @@ class ORM {
         return $state;
     }
 
-    /**     * select all sorted decreasing */ 
-    function select_all_sorted($col_sorted) {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY " . $col_sorted . " DESC";
-        $state = $this->dbconn->query($query);
-        if (!$state) {
-            return $this->dbconn->error;
-        } return $state;
-    }
+   
 
     /**
      * Select last row of table with where condition
@@ -122,7 +116,6 @@ class ORM {
         $query = explode(" ", $query);
         unset($query[count($query) - 2]);
         $query = implode(" ", $query);
-
         $result = $this->dbconn->query(trim($query));
 
         return $result;

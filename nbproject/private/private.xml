@@ -2,17 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/var/www/html/cafeteria/model/appconf.php</file>
-            <file>file:/var/www/html/cafeteria/login/forget%20password.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_header.php</file>
-            <file>file:/var/www/html/cafeteria/login/reset_password.php</file>
-            <file>file:/var/www/html/cafeteria/model/model.php</file>
-            <file>file:/var/www/html/cafeteria/admin/validation.php</file>
-            <file>file:/var/www/html/cafeteria/bootstrap/css/bootstrap.css.map</file>
-            <file>file:/var/www/html/cafeteria/admin/add_user.php</file>
-            <file>file:/var/www/html/cafeteria/login/myorder.php</file>
-            <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
