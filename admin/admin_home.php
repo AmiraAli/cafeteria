@@ -153,7 +153,8 @@ ini_set("display_errors", 0);
 
                         //row of header
                         var elem_order_table = document.createElement("table");
-                        elem_order_table.setAttribute("class", "table table-bordered");
+                        var tbody=document.createElement("tbody");
+                        elem_order_table.setAttribute("class", "table table-bordered active");
 
                         var elem_table_header = document.createElement("tr");
                         elem_table_header.setAttribute("class", "active");
@@ -238,8 +239,11 @@ ini_set("display_errors", 0);
                         elem_table_info.appendChild(td_action_info);
 //               
 
-                        elem_order_table.appendChild(elem_table_header);
-                        elem_order_table.appendChild(elem_table_info);
+                        tbody.appendChild(elem_table_header);
+                        tbody.appendChild(elem_table_info);
+                        
+                        elem_order_table.appendChild(tbody);
+                        elem_order_table.appendChild(tbody);
 
 
                         //append div of products
