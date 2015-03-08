@@ -73,7 +73,7 @@ require 'admin_header.php';
                         $obj_users = ORM::getInstance();
                         $obj_users->setTable('users');
 
-                        $all_users = $obj_users->select_all();
+                        $all_users = $obj_users->select(array('is_admin' => 0));
 
                         if ($all_users->num_rows > 0) {
 
@@ -114,6 +114,7 @@ require 'admin_header.php';
                                 <div class="col-md-<?php echo $j + 1; ?>">
                                     <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="120px" height="120px" class="img-responsive img-circle"
                                          onclick="add_product('<?php echo $row['name']; ?>',<?php echo $row['id']; ?>,<?php echo $row['price']; ?>)">
+                                    <div class="row col-lg-offset-1 badge "> <?php echo $row['price']; ?> .LEG</div>
                                 </div>
                                 <?php
                                 $j = $j + 1;

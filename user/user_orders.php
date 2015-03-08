@@ -22,19 +22,27 @@ require '../model/model.php';
                     <h1> My orders </h1>
                 </div>
                 <div class="col-md-5">
+                    <?php
+                    $datefrom = date('Y-m-d') . " 00:00:00";
+                    $dateto = date('Y-m-d') . " 23:59:59";
+                    ?>
                     <label  class="col-sm-2 control-label"  >From:</label>
-                    <input class="form-control" type = 'date' name="date_from" id="date_from" >
+                    <input class="form-control" type = 'date' name="date_from" id="date_from" value="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="col-md-5">
                     <label  class="col-sm-2 control-label"  >To:</label>
-                    <input class="form-control" type = 'date'  tname="date_to" id="date_to" >
+                    <input class="form-control" type = 'date'  tname="date_to" id="date_to" value="<?php echo date('Y-m-d'); ?>" >
                 </div>
                 <div class="col-sm-3 pull-right">
                     <button type="button" class="btn btn-success pull-right" onclick="select_orders()">Get my orders</button>
+                    <input type="hidden" id="user_name" value="<?php
+                    //get user_id from session 
+                    echo $user_name = $_SESSION['user_name'];
+                    ?>">
                 </div>
             </div>
             <div class="row">
-                <div class="row table-responsive">
+                <div class="table-responsive">
                     <table class="table table-bordered" >
                         <tr class="active">
                             <td class="col-md-3"> Order Date</td>
@@ -46,8 +54,40 @@ require '../model/model.php';
                 </div>
             </div>
             <div class="row">
-                <div class="row table-responsive"  id="table_row">
-                    <table id="table">
+                <div   id="table_row">
+                    <table   id="table">
+                        <?php
+                        //set default orders betwwen yesterday till current time
+                        $obj_orders = ORM::getInstance();
+                        $obj_orders->setTable('orders');
+
+                        $all_orders = $obj_orders->select_date("datetime", $datefrom, $dateto, array("user_id" => $_SESSION['user_id']));
+                        if ($all_orders->num_rows > 0) {
+                            while ($order = $all_orders->fetch_assoc()) {
+                                ?>
+                                <tr class="row" id="<?php echo $order['id']; ?>">
+                                    <td class="col-md-3"><?php echo $order['datetime']; ?>
+                                        <button class=" btn btn-success" id="<?php echo $order['id'] . " btn"; ?>" onclick="show_order('<?php echo $order['id'] . " btn"; ?>')">+</button>
+                                    </td>
+                                    <td class="col-md-3"><?php echo $order['status']; ?></td></td>
+                                    <td class="col-md-3"><?php echo $order['order_price']; ?></td>
+
+                                    <?php
+                                    if ($order['status'] == "processing") {
+                                        ?>
+                                        <td class="col-md-3"><button class=" col-md-5 btn btn-danger" id="<?php echo $order['id']; ?>" onclick="cancel('<?php echo $order['id']; ?>')">Cancel</button></td>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <td class="col-md-3"></td>
+                                    </tr>
+                                    <?php
+                                }
+                            }
+                        } else {
+                            echo "No Recent orders!";
+                        }
+                        ?>
 
                     </table>
                 </div>
@@ -61,9 +101,9 @@ require '../model/model.php';
                 <div class="  col-md-2 panel-title alert alert-success" id="total">
                     Total: 0
                 </div>
-                
+
             </div>
-           
+
 
             <!--            <nav>
                             <ul class="col-md-8 pull-right pagination" id="pagination">
@@ -105,6 +145,12 @@ require '../model/model.php';
                 return document.getElementById("date_from").value;
             }
 
+            //get the total price for default date
+            var date_to = get_date_to();
+            var date_from = get_date_from();
+            set_total_price(date_to, date_from, "<?php echo $_SESSION['user_name']; ?>");
+
+
             /**
              * if there is the value for date to and date from select orders
              */
@@ -114,6 +160,9 @@ require '../model/model.php';
 
                 var date_to = get_date_to();
                 var date_from = get_date_from();
+                //get the user name
+                var user_name = document.getElementById("user_name").value;
+                console.log(user_name);
 
                 //get orders when the user select dates
                 if (date_to !== "" && date_from !== "") {
@@ -124,7 +173,7 @@ require '../model/model.php';
                     var xmlhttp = new XMLHttpRequest();
                     xmlhttp.open("POST", "user_get_orders.php", true);
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xmlhttp.send("dateTo=" + date_to + "&dateFrom=" + date_from);
+                    xmlhttp.send("dateTo=" + date_to + " 23:59:59" + "&dateFrom=" + date_from + " 00:00:00");
 
                     //on change check even the request send or not and get the values of response
 
@@ -245,17 +294,58 @@ require '../model/model.php';
                         }
 
                     };
-                    set_total_price(date_to, date_from, "amira");
+
+                    set_total_price(date_to, date_from, user_name);
                 }
 
             }
 
+            //open the service socket at port 8000
+            var exampleSocket = new WebSocket("ws://127.0.0.1:8000");
+
+
             /**
              * Cancel function that is calling when click on cancel action
+             * will send to server to cancel the order at the admin
              */
             function cancel(order_id) {
                 console.log(order_id);
+
+                //first remove the order from database
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "delete_order.php", true);
+                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp.send("order_id=" + order_id);
+
+                //on change check even the request send or not and get the values of response
+
+                xmlhttp.onreadystatechange = function () {
+
+                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                        console.log(xmlhttp.responseText);
+
+                        //send on socket the action first then send order_id
+                        //to remove the order at the admin
+
+                        var msg = {
+                            action: "cancel",
+                            order_id: order_id,
+                        };
+
+                        //send msg as jason object
+                        exampleSocket.send(JSON.stringify(msg));
+
+                    }
+                };
+                //remove the element from table
                 document.getElementById(order_id).remove();
+                //calling set total price
+                var date_to = get_date_to();
+                var date_from = get_date_from();
+                //get the user name
+                var user_name = document.getElementById("user_name").value;
+
+                set_total_price(date_to, date_from, user_name);
             }
 
 
@@ -403,8 +493,9 @@ require '../model/model.php';
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.open("POST", "../admin/admin_get_check_user.php", true);
                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp.send("dateTo=" + date_to + "&dateFrom=" + date_from + "&user_name=" + user_name);
+                xmlhttp.send("dateTo=" + date_to + " 23:59:59" + "&dateFrom=" + date_from + " 00:00:00" + "&user_name=" + user_name);
 
+                console.log("dateTo=" + date_to + " 23:59:59" + "&dateFrom=" + date_from + " 00:00:00" + "&user_name=" + user_name);
                 //on change check even the request send or not and get the values of response
 
                 xmlhttp.onreadystatechange = function () {
@@ -418,13 +509,65 @@ require '../model/model.php';
 
                         var total_price = document.getElementById("total");
                         if (user_info[1] !== "") {
-                            total_price.innerHTML ="Total: "+user_info[1];
+                            total_price.innerHTML = "Total: " + user_info[1];
                         } else {
-                            total_price.innerHTML ="Total: "+"0";
+                            total_price.innerHTML = "Total: " + "0";
                         }
                     }
                 };
             }
+
+            /**
+             * this function to listen to recive status
+             * @param {type} event
+             * @returns {undefined}
+             */
+
+            exampleSocket.onmessage = function (event) {
+
+                //parse json object that recived from socket
+                var recived_msg = JSON.parse(event.data);
+
+                //alert(recived_msg.action);
+                switch (recived_msg.action) {
+
+                    case "status":
+
+                        var order_id = recived_msg.order_id;
+                        var status = recived_msg.status_text;
+
+
+                        //select order of tables and change it`s statues
+                        var elem_order = document.getElementById(order_id);
+                        var elem_order_childs = elem_order.childNodes;
+
+
+                        //set the status in the child of status only  and remove the cancel button
+
+                        if (elem_order_childs[1].innerHTML === "processing" || elem_order_childs[1].innerHTML === "out for delivery" || elem_order_childs[1].innerHTML === "done") {
+
+                            if (elem_order_childs[1].innerHTML === "processing") {
+                                elem_order_childs[3].childNodes[0].remove();
+                                elem_order_childs[3].innerHTML = " ";
+                            }
+                            elem_order_childs[1].innerHTML = status;
+
+                            
+
+                        } else {
+                            elem_order_childs[3].innerHTML = status;
+
+                            if (elem_order_childs[3].innerHTML === "processing") {
+                                elem_order_childs[7].childNodes[0].remove();
+                                elem_order_childs[7].innerHTML = " ";
+                            }
+                        }
+
+
+
+                        break;
+                }
+            };
 
 
         </script>

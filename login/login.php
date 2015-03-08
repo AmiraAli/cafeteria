@@ -49,10 +49,9 @@ if (!empty($_POST['submit'])) {
             } else
                 header('Location: ../user/user_home.php');
         }
-        
-        if(!$row)
-        {
-            $emptyErr="no such email or password you must register first";
+
+        if (!$row) {
+            $emptyErr = "no such email or password you must register first";
         }
     }
 }
@@ -75,8 +74,8 @@ if (!empty($_POST['submit'])) {
             .container{
 
                 background-repeat: no-repeat;
-                 border-style: solid;
-                border-width: 9px; 
+                // border-style: solid;
+                //border-width: 9px; 
                 background-size: cover;
                 height: 600px;
 
@@ -87,16 +86,21 @@ if (!empty($_POST['submit'])) {
                 width: 800px;
                 margin-left: 180px;
                 margin-top: 100px;
-                background-color:rgba(192,192,192,0.7);
+                background-color:rgba(195,192,192,0.7);
             }
         </style>
 
     </header>
     <body>
         <div class="container">
-
-            <div class="form-group-lg"></div>
+            <div class="header">
             <div class="jumbotron">
+
+                <p> <h1 class="col-md-offset-3 " > Cafeteria<small> login </small></h1></p>
+           
+            <div class="form-group-lg"></div>
+
+          
 
                 <form  method="post" action="login.php" class="form-horizontal">
                     <div class="form-group">
@@ -137,7 +141,7 @@ if (!empty($_POST['submit'])) {
                         <div class="col-sm-offset-2 col-sm-10">
                             <input type="submit" value="submit" name="submit" class="btn btn-default"><br>
                             <span class="error"><?php
-                                if (isset ($emptyErr))
+                                if (isset($emptyErr))
                                     echo $emptyErr;
                                 ?></span> 
                         </div>
@@ -147,5 +151,6 @@ if (!empty($_POST['submit'])) {
             </div>
 
         </div>
+            </div>
     </body>
 </html>

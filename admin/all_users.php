@@ -45,7 +45,7 @@ require './admin_header.php';
                             <?php
                             $user_data = ORM::getInstance();
                             $user_data->setTable('users');
-                            $all_data = $user_data->select_all();
+                            $all_data = $user_data->select(array('is_admin'=>0));
 
                             if ($all_data->num_rows > 0) {
                                 for ($i = 0; $i < $all_data->num_rows; $i++) {

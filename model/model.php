@@ -85,14 +85,14 @@ class ORM {
      * @return type
      */
     function select_last_row($values) {
-        $query = "select * from " . $this->table . " where id = (SELECT MAX(id) FROM " . $this->table . ") and ";
+        $query ="SELECT * FROM " . $this->table." where "; 
         foreach ($values as $key => $value) {
             $query.=$key . " = '" . $value . "' and ";
         }
         $query = explode(" ", $query);
         unset($query[count($query) - 2]);
         $query = implode(" ", $query);
-        $query.=" LIMIT 1";
+        $query.=" ORDER BY datetime DESC LIMIT 1";
 
         $state = $this->dbconn->query(trim($query));
         if (!$state) {
@@ -210,8 +210,24 @@ class ORM {
 
         return $result;
     }
+    /**
+     * select all sorted decreasing by where not equal
+     */
     
-    
+    function select_all_sorted($col_sorted,$values) {
+        $query = "SELECT * FROM " . $this->table. " where ";
+        foreach ($values as $key => $value) {
+            $query.=$key . " != '" . $value . "' and ";
+        }
+        $query = explode(" ", $query);
+        unset($query[count($query) - 2]);
+        $query = implode(" ", $query);
+        $query.=" ORDER BY ".$col_sorted." DESC";
+        $result = $this->dbconn->query(trim($query));
+
+        return $result;
+    }
+
     
 
     /**

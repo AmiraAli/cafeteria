@@ -8,7 +8,9 @@ require '../model/model.php';
 $date_to = $_POST['dateTo'];
 $date_from = $_POST['dateFrom'];
 
-$user_id = 1;
+//get user_id from session 
+session_start(); 
+$user_id=$_SESSION['user_id'];
 
 $obj_order = ORM::getInstance();
 $obj_order->setTable('orders');
