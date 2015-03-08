@@ -57,33 +57,38 @@ if (!empty($_POST['submit'])) {
              {
                  color: red;
              }
-            .container{
-
-                border-style: solid;
-                border-width: 9px; 
-                background-repeat: no-repeat;
-                background-size: cover;
-                height: 600px;
-                
-
-            }
+           
             .jumbotron
             {
-                width: 800px;
-                margin-left: 180px;
+                 width: 600px;
+                margin-left: 500px;
                 margin-top: 100px;
-                background-color:rgb(0,0,255,0.3);
+                background-color:rgba(102,51,0,0.7);
+            }
+            .col-lg-12{
+                background-image: url("../images/products/2.jpg");
+               	background-size: cover;
+                background-repeat: no-repeat;    
+                height: 800px;
+
+
+
             }
         </style>
 
     </header>
     <body>
-        <h1>forget password</h1>
+        
+       <div class="col-lg-12"> 
+
         <div class="container">
             <div class="jumbotron">
+                  <h2 class="col-md-offset-3"  style="color: white"> forget password
+                            <br>
+                  </h2>
             <form  method="post" action="forget password.php" class="form-horizontal">
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                    <label for="inputEmail3" class="col-sm-2 control-label"  style="color: white">Email</label>
                     <div class="col-sm-10">
                         <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email">
                         <span>
@@ -99,9 +104,9 @@ if (!empty($_POST['submit'])) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="question" class="col-sm-2 control-label">insert your question</label>
+                    <label for="question" class="col-sm-2 control-label"  style="color: white">question</label>
                     <div class="col-sm-10">
-                        <input type="text" name="question" class="form-control"  placeholder="Password">
+                        <input type="text" name="question" class="form-control" >
                         <span class="error"><?php
                             if (isset($valid->errors['question']))
                                 echo $valid->errors['question'];
@@ -111,7 +116,7 @@ if (!empty($_POST['submit'])) {
                 </div>
 
                 <div class="form-group">
-                    <label for="answer" class="col-sm-2 control-label" >insert your answer</label>
+                    <label for="answer" class="col-sm-2 control-label"  style="color: white" > answer</label>
                     <div class="col-sm-10">
                         <input type="text" name="answer" class="form-control">
                         <span class="error"><?php
@@ -124,7 +129,7 @@ if (!empty($_POST['submit'])) {
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <input type="submit" value="submit" name="submit" class="btn btn-default">
+                        <input type="submit" value="submit" name="submit" class="btn btn-default" style="margin-left: 130px">
                         <br>
                         <span class="error"><?php
                             if(isset($errorrequire) && !empty($_POST['question'])&& !empty($_POST['answer'])) {
@@ -137,6 +142,7 @@ if (!empty($_POST['submit'])) {
             </form>
             </div>
         </div>
+       </div>
     </body>
 </html>
 

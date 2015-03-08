@@ -49,7 +49,17 @@ require 'admin_header.php';
             if ($flag == true) {
 
                 //save image 
+                $data->setTable('users');
+                $email = $_POST['email'];
+                $user_values = array("email" => $email);
+                $results = $data->select($user_values);
+                $row = $results->fetch_assoc();
+                
 
+// user exists
+        if (!$row) {
+            
+               
                 $upfile = '/var/www/html/cafeteria/images/users/' . $_FILES['userfile']['name'];
                 if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
                     if (!move_uploaded_file($_FILES['userfile']['tmp_name'], $upfile)) {
@@ -73,6 +83,7 @@ require 'admin_header.php';
 
 //                mysqli_close($db);
             }
+        }
         }
         ?>
 

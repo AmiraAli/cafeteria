@@ -16,15 +16,6 @@ require 'user_header.php';
     <body>
 
 
-        <!--        <div class="header">
-          
-                    <p>//<?php
-        //   session_start(); 
-//                       $admin=$_SESSION['login_user'];
-//                       echo $admin;
-//            
-        ?></p>
-                </div>-->
 
         <div class="container">
             <div class="col-md-3 panel panel-default"  id="create_order">
@@ -84,8 +75,12 @@ require 'user_header.php';
                     $obj_order = ORM::getInstance();
                     $obj_order->setTable('orders');
 
+                    //get user_id from session
+
+                    $user_id = $_SESSION['user_id'];
+
                     // select the latest order  of this user
-                    $last_order = $obj_order->select_last_row(array('user_id' => 1));
+                    $last_order = $obj_order->select_last_row(array('user_id' => $user_id));
 
                     if ($last_order) {
 
@@ -162,8 +157,9 @@ require 'user_header.php';
                             while ($row = $products->fetch_assoc()) {
                                 ?>
                                 <div class="col-md-<?php echo $j + 1; ?>">
-                                    <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="120px" height="120px" class="img-responsive img-circle"
+                                    <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="100px" height="100px" class="img-responsive img-circle"
                                          onclick="add_product('<?php echo $row['name']; ?>',<?php echo $row['id']; ?>,<?php echo $row['price']; ?>)">
+                                    <div class="row col-lg-offset-1 badge "> <?php echo $row['price']; ?> .LEG</div>
                                 </div>
                                 <?php
                                 $j = $j + 1;
@@ -224,8 +220,8 @@ require 'user_header.php';
                     cancel_btn.innerHTML = "x";
                     cancel_btn.setAttribute("class", "btn btn-danger pull-right ");
 
-                    
-                    cancel_btn.setAttribute("onclick", "cancel(" +id+")");
+
+                    cancel_btn.setAttribute("onclick", "cancel(" + id + ")");
 
                     //appeand parameter
                     elem_product.appendChild(elem_product_name);
@@ -262,6 +258,9 @@ require 'user_header.php';
 
 
             }
+
+            //open socket that listen to posrt 8080
+            var exampleSocket = new WebSocket("ws://127.0.0.1:8000");
 
             /**
              * this function that get the order informations to insert in database
@@ -319,11 +318,51 @@ require 'user_header.php';
 
                     //on change check even the request send or not
 
+
                     xmlhttp.onreadystatechange = function () {
 
+                        // alert(xmlhttp.readyState);
+                        // alert(xmlhttp.status);
                         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 
-                            console.log(xmlhttp.responseText);
+                            //alert(xmlhttp.responseText);
+
+                            //alert(xmlhttp.responseText);
+                            //alert(xmlhttp.responseText.split(";")[5]);
+
+                            //prepare the information of order before send on socket
+                            var order_info = xmlhttp.responseText.split(";");
+                            var order_products_info = order_info[5].split("%");
+
+                            var products = [];
+                            for (var i = 0; i < order_products_info.length - 1; i++) {
+
+                                var product_info = order_products_info[i].split("/");
+                                var product = {
+                                    product_name: product_info[0],
+                                    product_pic: product_info[1],
+                                    product_amount: product_info[2],
+                                    product_price: product_info[3],
+                                };
+
+                                products.push(product);
+                            }
+                            var msg = {
+                                action: "confirm",
+                                order_id: order_info[0],
+                                order_date: order_info[1],
+                                user_name: order_info[2],
+                                user_ext: order_info[3],
+                                order_room: order_info[4],
+                                order_price: order_info[6],
+                                products_count: order_products_info.length,
+                                products: products,
+                            };
+
+                            // alert(JSON.stringify(msg));
+                            //send the resonse text via socket
+                            exampleSocket.send(JSON.stringify(msg));
+                            //alert("send");
 
                         }
                     };
@@ -371,17 +410,17 @@ require 'user_header.php';
                 elem_order_price.innerHTML = "Total Price: " + total_price;
 
             }
-            
+
             /**
              * cancel function to cancel request of certain product
              */
-            function cancel(id,price) {
+            function cancel(id, price) {
                 //get the div of product by it`s id number
                 var elem_exists_product = document.getElementById(id);
-                
+
                 //remove the product request
                 elem_exists_product.remove();
-                
+
                 //remove the id of element from the array
                 var index = products_id.indexOf(id)
                 if (index > -1) {
@@ -401,8 +440,8 @@ require 'user_header.php';
 
                 var elem_order_price = document.getElementById("total_price");
                 elem_order_price.innerHTML = "Total Price: " + total_price;
-                
-                
+
+
             }
 
         </script>

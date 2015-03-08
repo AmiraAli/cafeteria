@@ -6,8 +6,10 @@
             <file>file:/var/www/html/cafeteria/model/appconf.php</file>
             <file>file:/var/www/html/cafeteria/user/user_header.php</file>
             <file>file:/var/www/html/cafeteria/model/model.php</file>
-            <file>file:/var/www/html/cafeteria/login/login.php</file>
+            <file>file:/var/www/html/cafeteria/bootstrap/css/bootstrap.css.map</file>
+            <file>file:/var/www/html/cafeteria/admin/add_user.php</file>
             <file>file:/var/www/html/cafeteria/login/myorder.php</file>
+            <file>file:/var/www/html/cafeteria/login/login.php</file>
             <file>file:/var/www/html/cafeteria/user/user_orders.php</file>
         </group>
     </open-files>
