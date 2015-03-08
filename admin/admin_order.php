@@ -1,7 +1,7 @@
 <?php
 
 require '../model/model.php';
-
+session_start();
 
 /*
  * this file used to insert order into database
@@ -40,7 +40,7 @@ $result = $obj_order->insert(array("user_id" => $user_id, "status" => $status, "
 $obj_order_id = ORM::getInstance();
 $obj_order_id->setTable('orders');
 
-$last_order=$obj_order_id->select_last_row(array("user_id" => 1));
+$last_order=$obj_order_id->select_last_row(array("user_id" =>$user_id));
 
 $order_id = $last_order['id'];
 
