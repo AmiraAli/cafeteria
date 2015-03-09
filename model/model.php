@@ -28,7 +28,7 @@ class ORM {
     function __construct() {
 
         extract($GLOBALS['conf']);
-        $this->dbconn = new mysqli($host, $username,'1234', $database);
+        $this->dbconn = new mysqli($host, $username,$password, $database);
     }
 
     /**

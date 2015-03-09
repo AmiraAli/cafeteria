@@ -16,7 +16,7 @@ require 'admin_header.php';
     <body>
         <div class="container">
             <div class="col-md-3 panel panel-default"  id="create_order">
-                <div class="panel panel-heading">
+                <div class="panel panel-heading panel panel-warning">
 
                     <h1>   Order  </h1>
                 </div>
@@ -60,7 +60,7 @@ require 'admin_header.php';
             <div class="col-md-9  panel panel-default">
                 <div class="row panel-body">
 
-                    <div class="panel panel-heading">
+                    <div class="panel panel-heading panel panel-warning">
 
                         <h1> Add to user:</h1>
                     </div>
@@ -93,7 +93,7 @@ require 'admin_header.php';
                 <div class="row">
                     <div class="row panel-body">
 
-                        <div class="panel panel-heading">
+                        <div class=" panel panel-heading panel panel-warning">
 
                             <h1>Menu</h1>
                         </div>
@@ -111,10 +111,10 @@ require 'admin_header.php';
                             $j = 1;
                             while ($row = $products->fetch_assoc()) {
                                 ?>
-                                <div class="col-md-<?php echo $j + 1; ?>">
+                                <div class="col-md-3">
                                     <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="120px" height="120px" class="img-responsive img-circle"
                                          onclick="add_product('<?php echo $row['name']; ?>',<?php echo $row['id']; ?>,<?php echo $row['price']; ?>)">
-                                    <div class="row col-lg-offset-1 badge "> <?php echo $row['price']; ?> .LEG</div>
+                                    <div class="row col-lg-offset-2 badge "> <?php echo $row['price']; ?> .LE</div>
                                 </div>
                                 <?php
                                 $j = $j + 1;

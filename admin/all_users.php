@@ -27,20 +27,20 @@ require './admin_header.php';
                 <h2> All Users</h2>
             </div>
             <div class="row">
-                <button type="button" class="btn btn-info pull-right"onclick="adduser()">Add User</button>
+                <button type="button" class="btn btn-warning pull-right"onclick="adduser()">Add User</button>
             </div>
             <div class="row">
-                <div class="col-md-offset-3 col-md-6">
+                <div class="col-md-offset-0 col-md-12">
 
                     
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <tr class="info">
-                                <td>Name</td>
-                                <td>Room</td>
-                                <td>Image</td>
-                                <td>Ext</td>
-                                <td>Action</td>
+                        <table class="table ">
+                            <tr class=" row active">
+                                <td class="col-md-2">Name</td>
+                                <td class="col-md-2">Room</td>
+                                <td class="col-md-2">Image</td>
+                                <td class="col-md-2">Ext</td>
+                                <td class="col-md-2">Action</td>
                             </tr>
                             <?php
                             $user_data = ORM::getInstance();
@@ -52,15 +52,15 @@ require './admin_header.php';
                                     while ($user = $all_data->fetch_assoc()) {            
                                                  
                                         ?>
-                                        <tr>
-                                            <td> <?php echo $user['name']; ?></td>
-                                            <td> <?php echo $user['room_no']; ?></td>
+                                        <tr class="row">
+                                            <td class="col-md-2"> <?php echo $user['name']; ?></td>
+                                            <td class="col-md-2"> <?php echo $user['room_no']; ?></td>
                                             <?php $imgpath = "../images/users/" . trim($user['pic']); ?>
-                                            <td><img src="<?php echo $imgpath; ?>" class="img-responsive" width="80" height="80"></td>
-                                            <td> <?php echo $user['ext']; ?></td>
+                                            <td class="col-md-2"><img src="<?php echo $imgpath; ?>" class="img-responsive img-circle" width="80" height="80"></td>
+                                            <td class="col-md-2"> <?php echo $user['ext']; ?></td>
 
-                                            <td> <a href="delete.php?id=<?php echo $user['id']; ?>" >Delete</a>
-                                                <a href="edit.php?id=<?php echo $user['id']; ?>" >Edit</a> 
+                                            <td class="col-md-2"> <a class="btn btn-danger" href="delete.php?id=<?php echo $user['id']; ?>" >Delete</a>
+                                                <a class="btn btn-success" href="edit.php?id=<?php echo $user['id']; ?>" >Edit</a> 
                                             </td>
 
                                         </tr>

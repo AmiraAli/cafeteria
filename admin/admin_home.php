@@ -261,7 +261,7 @@ ini_set("display_errors", 0);
 
                             var j = i + 2;
                             var product_colum = document.createElement("div");
-                            product_colum.setAttribute("class", "col-md-" + j);
+                            product_colum.setAttribute("class", "col-md-3" );
 
 
                             var product_name_row = document.createElement("div");

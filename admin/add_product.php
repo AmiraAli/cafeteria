@@ -37,7 +37,7 @@ if (!empty($_POST['save'])) {
 
             //save image 
 
-            $upfile = '/var/www/cafeteria/images/products/' . $_FILES['productfile']['name'];
+            $upfile = '/var/www/html/cafeteria/images/products/' . $_FILES['productfile']['name'];
             if (is_uploaded_file($_FILES['productfile']['tmp_name'])) {
                 if (!move_uploaded_file($_FILES['productfile']['tmp_name'], $upfile)) {
                     echo 'can`t upload your image  ' . "<br/>";
@@ -75,15 +75,15 @@ if (!empty($_POST['save'])) {
             }
         }
 
-        $error_image = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
-        if (gettype($error_image) == "string") {
-            $flag = false;
-        }
+//        $error_image = $valid->valid_image($_FILES['productfile']['error'], $_FILES['productfile']['type']);
+//        if (gettype($error_image) == "string") {
+//            $flag = false;
+//        }
 
         //check on password&email&image 
 
         if ($flag == true) {
-            $upfile = '/var/www/cafeteria/images/products/' . $_FILES['productfile']['name'];
+            $upfile = '/var/www/html/cafeteria/images/products/' . $_FILES['productfile']['name'];
             if (is_uploaded_file($_FILES['productfile']['tmp_name'])) {
                 if (!move_uploaded_file($_FILES['productfile']['tmp_name'], $upfile)) {
                     echo 'can`t upload your image  ' . "<br/>";
@@ -107,7 +107,14 @@ if (!empty($_POST['save'])) {
                 $is_avaliable = $_POST['checkbox'];
             }
 
-            $updated = $obj->update(array('id' => $product_data[0]), array("name" => $_POST['product'], "price" => $_POST['price'], "category_id" => $id, "is_available" => $is_avaliable, "pic" => $_FILES['productfile']['name']));
+            if ($_FILES['productfile']['name'] !== "") {
+                $pic = $_FILES['productfile']['name'];
+            } else {
+                $pic = $product_data[5];
+                
+            }
+
+            $updated = $obj->update(array('id' => $product_data[0]), array("name" => $_POST['product'], "price" => $_POST['price'], "category_id" => $id, "is_available" => $is_avaliable, "pic" =>$pic));
             echo $updated;
             header("Location: http://localhost/cafeteria/admin/all_products.php");
         } else {
@@ -117,7 +124,6 @@ if (!empty($_POST['save'])) {
     }
 }
 ?>
-
 
 
 <html>
@@ -133,6 +139,20 @@ if (!empty($_POST['save'])) {
         <script src="../bootstrap-3.3.2-dist/js/bootstrap.js" type="text/javascript"></script>
 
     </head>
+    
+    <header>
+        <style>
+            .error
+            {
+                color: red;
+            }
+
+
+
+
+        </style>
+
+    </header>
 
     <body>
 
@@ -161,7 +181,7 @@ if (!empty($_POST['save'])) {
                                 echo $product_data[1];
                             }
                             ?>" >
-                            <span> <?php
+                            <span class="error"> <?php
                                 if (isset($check[0]) && (empty($_POST['product']))) {
                                     echo " This field is required ";
                                 }
@@ -179,7 +199,7 @@ if (!empty($_POST['save'])) {
                                 echo $product_data[2];
                             }
                             ?>">  
-                            <span> <?php
+                            <span class="error"> <?php
                                 if (isset($check[1]) && (empty($_POST['price']))) {
                                     echo " This field is required ";
                                 }
@@ -228,9 +248,10 @@ if (!empty($_POST['save'])) {
 
                         <div class="form-group">
                             <label> Product Picture</label>
+                            <img src="<?php echo "../images/products/" . $product_data[5]; ?>"  width="100px" height="100px" class="img-responsive img-circle">
                             <input type="file" name="productfile" id="profilepicture">
 
-                            <span> <?php
+                            <span class="error"> <?php
                                 if (isset($error_image)) {
                                     echo $error_image;
                                 }
@@ -279,12 +300,12 @@ if (!empty($_POST['save'])) {
 
                         function add_catogrie() {
                             var text = document.getElementById("new_catogrie").value;
-                            
+
                             //open xmlhttp request that render to add_catogrie and send text
                             var xmlhttp = new XMLHttpRequest();
                             xmlhttp.open("POST", "add_catogrie.php", true);
                             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                            xmlhttp.send("text="+ text);
+                            xmlhttp.send("text=" + text);
 
                             //on change check even the request send or not and get the values of response
 
@@ -293,10 +314,10 @@ if (!empty($_POST['save'])) {
                                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 
                                     //get information of response of orders
-                                   // alert(xmlhttp.responseText);
+                                    // alert(xmlhttp.responseText);
                                 }
-                        };
-                    }
+                            };
+                        }
                     </script>
                     </body>
                     </html>

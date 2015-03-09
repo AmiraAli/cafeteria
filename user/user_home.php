@@ -18,7 +18,7 @@ require 'user_header.php';
 
 
         <div class="container">
-            <div class="col-md-3 panel panel-default"  id="create_order">
+            <div class=" col-md-3 panel panel-default"  id="create_order">
                 <div class="panel panel-heading">
 
                     <h1>   Order  </h1>
@@ -63,7 +63,7 @@ require 'user_header.php';
             <div class="col-md-9 panel panel-default">
                 <div class="row panel-body">
 
-                    <div class="panel panel-heading">
+                    <div class="panel panel-heading panel panel-warning">
 
                         <h1> Last order</h1>
                     </div>
@@ -95,7 +95,7 @@ require 'user_header.php';
                         $i = 1;
                         while ($current_product = $order_products->fetch_assoc()) {
                             ?>
-                            <div class="col-md-<?php echo $i + 1; ?>">
+                            <div class="col-md-3">
                                 <?php
                                 ?>
                                 <div class="row">
@@ -122,7 +122,7 @@ require 'user_header.php';
                                     ?>
                                 </div>
                                 <div class="row">
-                                    <img src="<?php echo "../images/products/" . $product_info['pic']; ?>" class="img-responsive img-circle"  width="120px" height="120px">
+                                    <img src="<?php echo "../images/products/" . $product_info['pic']; ?>" class="img-responsive img-circle"  width="80px" height="80px">
                                 </div>
                             </div>
 
@@ -137,11 +137,11 @@ require 'user_header.php';
                 <div class="row">
                     <div class="row panel-body">
 
-                        <div class="panel panel-heading">
+                        <div class="panel panel-heading panel panel-warning">
 
                             <h1>Menu</h1>
                         </div>
-
+                        <div class="row">
 
                         <?php
                         /**
@@ -156,10 +156,10 @@ require 'user_header.php';
                             $j = 1;
                             while ($row = $products->fetch_assoc()) {
                                 ?>
-                                <div class="col-md-<?php echo $j + 1; ?>">
+                                <div class="col-md-3">
                                     <img src="<?php echo "../images/products/" . $row['pic']; ?>" width="100px" height="100px" class="img-responsive img-circle"
                                          onclick="add_product('<?php echo $row['name']; ?>',<?php echo $row['id']; ?>,<?php echo $row['price']; ?>)">
-                                    <div class="row col-lg-offset-1 badge "> <?php echo $row['price']; ?> .LEG</div>
+                                    <div class="row col-lg-offset-2 badge "> <?php echo $row['price']; ?> .LE</div>
                                 </div>
                                 <?php
                                 $j = $j + 1;
@@ -169,6 +169,7 @@ require 'user_header.php';
                         }
                         ?>
                     </div>
+                        </div>
                 </div>
             </div>
 

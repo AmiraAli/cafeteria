@@ -26,20 +26,20 @@ require './admin_header.php';
             </div>
 
             <div class="row">
-                <button type="button" class="btn btn-info pull-right"onclick="addproduct()">Add Product</button>
+                <button type="button" class="btn btn-warning pull-right"onclick="addproduct()">Add Product</button>
             </div>
             <div class="row">
-                <div class="col-md-offset-3 col-md-6">
+                <div class="col-md-offset-1 col-md-10">
 
 
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <tr class="info">
-                                <td>Name</td>
-                                <td>Price</td>
-                                <td>Image</td>
-                                <td>Status</td>
-                                <td>Action</td>
+                        <table class="table ">
+                            <tr class=" row Active">
+                                <td class="col-md2">Name</td>
+                                <td class="col-md2">Price</td>
+                                <td class="col-md2">Image</td>
+                                <td class="col-md2">Status</td>
+                                <td class="col-md2">Action</td>
                             </tr>
                             <?php
                             $category_data = ORM::getInstance();
@@ -50,21 +50,30 @@ require './admin_header.php';
                                 for ($i = 0; $i < $all_data->num_rows; $i++) {
                                     while ($category = $all_data->fetch_assoc()) {
                                         ?>
-                                        <tr>
-                                            <td> <?php echo $category['name']; ?></td>
-                                            <td> <?php echo $category['price']; ?></td>
+                                        <tr class="row">
+                                            <td class="col-md2"> <?php echo $category['name']; ?></td>
+                                            <td class="col-md2"> <?php echo $category['price']; ?></td>
                                             <?php $imgpath = "../images/products/" . trim($category['pic']); ?>
-                                            <td><img src="<?php echo $imgpath; ?>" class="img-responsive" width="80" height="80"></td>
-                                            <td><?php
+                                            <td class="col-md2"><img src="<?php echo $imgpath; ?>" class="img-responsive img-circle" width="100" height="100"></td>
+                                            <td class="col-md2"><?php
                                                 if ($category['is_available'] == "1") {
                                                     echo "Avaliable";
-                                                }else{
-                                                    echo "Unavaliable";
-                                                }
+                                                
                                                 ?></td>
-                                            <td> <a href="delete_pro.php?id=<?php echo $category['id']; ?>" >Delete</a>
-                                                 <a href="edit_pro.php?id=<?php echo $category['id']; ?>" > Edit</a> 
+                                            <td class="col-md2"> <a  class="btn btn-danger"  href="delete_pro.php?id=<?php echo $category['id']; ?>" >Delete</a>
+                                                 <a  class="btn btn-success"  href="edit_pro.php?id=<?php echo $category['id']; ?>" > Edit</a> 
                                             </td>
+                                            <?php
+                                            }else{
+                                                    echo "Un Avaliable";
+                                                    
+                                                    ?></td>
+                                            <td class="col-md2"> 
+                                                 <a class="btn btn-success" href="edit_pro.php?id=<?php echo $category['id']; ?>" > Edit</a> 
+                                            </td>
+                                            <?php
+                                                }
+                                            ?>
                                         </tr>
 
                                         <?php

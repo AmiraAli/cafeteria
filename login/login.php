@@ -4,57 +4,70 @@ session_start();
 ini_set("display_errors", 1);
 include('validate.php');
 require '../model/model.php';
-$flag = false;
 
 
-$obj = ORM::getInstance();
-$obj->setTable('users');
 
-$valid = new validator();
+    if (isset($_SESSION['user_name'])){
 
-if (!empty($_POST['submit'])) {
-    $flag = true;
-
-//check validations
-
-    $check = $valid->empty_fields($_POST);
-
-    $error = $valid->valid_email($_POST['email']);
-    if (gettype($error) == "string") {
-        $flag = false;
-    }
+           if(isset($_SESSION['is_admin'])){
+                   header('Location: ../admin/admin_home.php');
+            }else{
+                   header('Location: ../user/user_home.php');
+                }
+  }else{
+    $flag = false;
 
 
-    if ($flag == true) {
-//check information from database
-        $email = $_POST['email'];
-        $password = md5($_POST['password']);
-        $user_values = array("email" => $email, "password" => $password);
-        $results = $obj->select($user_values);
-        $row = $results->fetch_assoc();
+    $obj = ORM::getInstance();
+    $obj->setTable('users');
 
-// user exists
-        if ($row) {
+    $valid = new validator();
 
-// Information concerning ANY user.
-            $_SESSION['user_name'] = $row['name'];
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['user_pic'] = $row['pic'];
+    if (!empty($_POST['submit'])) {
+        $flag = true;
 
-// Info concerning admin ONLY. Should enter if condition if the user
-// is an admin.
-            if ($row['is_admin'] == "1") {
-                $_SESSION['is_admin'] = true;
-                header('Location: ../admin/admin_home.php');
-            } else
-                header('Location: ../user/user_home.php');
+    //check validations
+
+        $check = $valid->empty_fields($_POST);
+
+        $error = $valid->valid_email($_POST['email']);
+        if (gettype($error) == "string") {
+            $flag = false;
         }
 
-        if (!$row) {
-            $emptyErr = "no such email or password you must register first";
+
+        if ($flag == true) {
+    //check information from database
+            $email = $_POST['email'];
+            $password = md5($_POST['password']);
+            $user_values = array("email" => $email, "password" => $password);
+            $results = $obj->select($user_values);
+            $row = $results->fetch_assoc();
+
+    // user exists
+            if ($row) {
+
+                // Information concerning ANY user.
+                            $_SESSION['user_name'] = $row['name'];
+                            $_SESSION['user_id'] = $row['id'];
+                            $_SESSION['user_pic'] = $row['pic'];
+
+                // Info concerning admin ONLY. Should enter if condition if the user
+                // is an admin.
+                            if ($row['is_admin'] == "1") {
+                                $_SESSION['is_admin'] = true;
+                                header('Location: ../admin/admin_home.php');
+                            } else
+                                header('Location: ../user/user_home.php');
+
+            }
+
+            if (!$row) {
+                $emptyErr = "no such email or password you must register first";
+            }
         }
     }
-}
+  }
 ?>
 
 <html>

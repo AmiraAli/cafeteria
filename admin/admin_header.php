@@ -1,3 +1,7 @@
+ <?php
+     session_start();
+     if(isset($_SESSION['is_admin'])){
+?>
 <html>
     <head>
         <meta charset="utf-8">
@@ -14,9 +18,7 @@
             <div class="container-fluid">
                 <div class="navbar-header"> </div>
                 <div>
-                    <?php
-                    session_start();
-                    ?>
+
                     <a class="navbar-btn pull-right" href="../login/logout.php">Logout</a>
                     <img src="<?php
                     if (isset($_SESSION['user_pic'])) {
@@ -49,4 +51,10 @@
     </body>
 
 </html>
+<?php
+     }else{
+          echo " Sorry you do not have permittion to open this page !!";
+           exit;
+     }
 
+?>
