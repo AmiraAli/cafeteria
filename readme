@@ -1,0 +1,16 @@
+#To run the login page for web application 
+	localhost/var/www/html/cafeteria/login/login.php
+
+
+#To run server for web socket
+
+	cd /var/www/html/cafeteria
+	php bin/chat-server.php
+
+#for admin 
+	
+	email:admin@admin.com
+	password:123456
+
+database name caeteria is dumbed in database/cafeteria.sql
+
